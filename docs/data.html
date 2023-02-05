@@ -232,9 +232,6 @@ class DATA:
         node = {&#34;data&#34;: self.clone(rows)}
 
         if len(rows) &gt; 2 * min:
-            # print(len(self.half(rows, cols, above)))
-            # self.halfCalls += 1
-            # print(&#34;# of half calls: &#34; + str(self.halfCalls))
             left, right, node[&#34;A&#34;], node[&#34;B&#34;], node[&#34;mid&#34;], _ = self.half(rows, cols, above)
             node[&#34;left&#34;] = self.cluster(left, min, cols, node[&#34;A&#34;])
             node[&#34;right&#34;] = self.cluster(right, min, cols, node[&#34;B&#34;])
@@ -486,9 +483,6 @@ class DATA:
         node = {&#34;data&#34;: self.clone(rows)}
 
         if len(rows) &gt; 2 * min:
-            # print(len(self.half(rows, cols, above)))
-            # self.halfCalls += 1
-            # print(&#34;# of half calls: &#34; + str(self.halfCalls))
             left, right, node[&#34;A&#34;], node[&#34;B&#34;], node[&#34;mid&#34;], _ = self.half(rows, cols, above)
             node[&#34;left&#34;] = self.cluster(left, min, cols, node[&#34;A&#34;])
             node[&#34;right&#34;] = self.cluster(right, min, cols, node[&#34;B&#34;])
@@ -725,9 +719,6 @@ above - Previous point of split</p>
     node = {&#34;data&#34;: self.clone(rows)}
 
     if len(rows) &gt; 2 * min:
-        # print(len(self.half(rows, cols, above)))
-        # self.halfCalls += 1
-        # print(&#34;# of half calls: &#34; + str(self.halfCalls))
         left, right, node[&#34;A&#34;], node[&#34;B&#34;], node[&#34;mid&#34;], _ = self.half(rows, cols, above)
         node[&#34;left&#34;] = self.cluster(left, min, cols, node[&#34;A&#34;])
         node[&#34;right&#34;] = self.cluster(right, min, cols, node[&#34;B&#34;])

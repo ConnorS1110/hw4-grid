@@ -28,29 +28,28 @@
 </summary>
 <pre><code class="python">import argparse
 import csv
+import json
 import math
 import os
 from num import NUM
 from sym import SYM
 from data import DATA
 from math import floor
+from copy import deepcopy
 
 help = &#34;&#34;&#34;
-cluster.lua : an example csv reader script
+grid.lua : a rep grid processor
 (c)2022, Tim Menzies &lt;timm@ieee.org&gt;, BSD-2
 
-USAGE: cluster.lua  [OPTIONS] [-g ACTION]
+USAGE: grid.lua  [OPTIONS] [-g ACTION]
 
 OPTIONS:
   -d  --dump    on crash, dump stack   = false
-  -f  --file    name of file           = ../etc/data/auto93.csv
-  -F  --Far     distance to &#34;faraway&#34;  = .95
-  -g  --go      start-up action        = all
+  -f  --file    name of file           = ../etc/data/repgrid1.csv
+  -g  --go      start-up action        = data
   -h  --help    show help              = false
-  -m  --min     stop clusters at N^min = .5
   -p  --p       distance coefficient   = 2
   -s  --seed    random number seed     = 937162211
-  -S  --Sample  sampling data size     = 512
 
 ACTIONS:
 &#34;&#34;&#34;
@@ -60,6 +59,34 @@ Seed = 937162211
 egs = {}
 n = 0
 
+def print_all_attributes(obj):
+    stringToPrint = &#34;{ &#34;
+    for attr, value in vars(obj).items():
+        stringToPrint += str(attr) + &#34;: &#34; + str(value) + &#34; &#34;
+    return stringToPrint + &#34;}&#34;
+
+def dofile(filename):
+    with open(filename) as f:
+        return json.load(f)
+
+def transpose(t):
+    u = []
+    for i in range(0, len(t[0])):
+        u[i] = []
+        for j in range(0, len(t)):
+            u[i][j] = t[j][i]
+    return u
+
+def repCols(cols):
+    copyCols = deepcopy(cols)
+    for col in cols:
+        col[-1] = str(col[0]) + &#34;:&#34; + str(col[-1])
+        for j in range(1, len(col)):
+            col[j - 1] = col[j]
+        col.pop()
+    cols.insert(0, [&#39;Num&#39; + str(k) for k in range(len(cols[0]))])
+    cols[0][-1] = &#34;thingX&#34;
+    return DATA(cols)
 
 def show(node, what, cols, nPlaces, lvl=None):
     &#34;&#34;&#34;
@@ -293,11 +320,8 @@ def getCliArgs():
     parser.add_argument(&#34;-g&#34;, &#34;--go&#34;, type=str, default=&#34;all&#34;, required=False, help=&#34;start-up action&#34;)
     parser.add_argument(&#34;-h&#34;, &#34;--help&#34;, action=&#39;store_true&#39;, help=&#34;show help&#34;)
     parser.add_argument(&#34;-s&#34;, &#34;--seed&#34;, type=int, default=937162211, required=False, help=&#34;random number seed&#34;)
-    parser.add_argument(&#34;-f&#34;, &#34;--file&#34;, type=str, default=&#34;../etc/data/auto93.csv&#34;, required=False, help=&#34;name of file&#34;)
-    parser.add_argument(&#34;-F&#34;, &#34;--Far&#34;, type=float, default=0.95, required=False, help=&#34;Distance to Faraway&#34;)
-    parser.add_argument(&#34;-m&#34;, &#34;--min&#34;, type=float, default=0.5, required=False, help=&#34;stop clusters at N^min&#34;)
+    parser.add_argument(&#34;-f&#34;, &#34;--file&#34;, type=str, default=&#34;../etc/data/repgrid1.json&#34;, required=False, help=&#34;name of file&#34;)
     parser.add_argument(&#34;-p&#34;, &#34;--p&#34;, type=int, default=2, required=False, help=&#34;distance coefficient&#34;)
-    parser.add_argument(&#34;-S&#34;, &#34;--Sample&#34;, type=int, default=512, required=False, help=&#34;Sampling data size&#34;)
 
     args = parser.parse_args()
 
@@ -483,7 +507,17 @@ def halfFunc():
     print(len(left), len(right), len(data.rows))
     print(A.cells, c)
     print(mid.cells)
-    print(B.cells)</code></pre>
+    print(B.cells)
+
+def repColsFunc():
+    script_dir = os.path.dirname(__file__)
+    full_path = os.path.join(script_dir, args.file)
+    rawData = dofile(full_path)
+    t = repCols(rawData[&#34;cols&#34;])
+    for col in t.cols.all:
+        print(vars(col))
+    for row in t.rows:
+        print(vars(row))</code></pre>
 </details>
 </section>
 <section>
@@ -773,6 +807,20 @@ y - y of line between a &amp; b</p></div>
     )</code></pre>
 </details>
 </dd>
+<dt id="src.utility.dofile"><code class="name flex">
+<span>def <span class="ident">dofile</span></span>(<span>filename)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def dofile(filename):
+    with open(filename) as f:
+        return json.load(f)</code></pre>
+</details>
+</dd>
 <dt id="src.utility.eg"><code class="name flex">
 <span>def <span class="ident">eg</span></span>(<span>key, string, fun)</span>
 </code></dt>
@@ -843,11 +891,8 @@ fun - callback function to use for test case</p>
     parser.add_argument(&#34;-g&#34;, &#34;--go&#34;, type=str, default=&#34;all&#34;, required=False, help=&#34;start-up action&#34;)
     parser.add_argument(&#34;-h&#34;, &#34;--help&#34;, action=&#39;store_true&#39;, help=&#34;show help&#34;)
     parser.add_argument(&#34;-s&#34;, &#34;--seed&#34;, type=int, default=937162211, required=False, help=&#34;random number seed&#34;)
-    parser.add_argument(&#34;-f&#34;, &#34;--file&#34;, type=str, default=&#34;../etc/data/auto93.csv&#34;, required=False, help=&#34;name of file&#34;)
-    parser.add_argument(&#34;-F&#34;, &#34;--Far&#34;, type=float, default=0.95, required=False, help=&#34;Distance to Faraway&#34;)
-    parser.add_argument(&#34;-m&#34;, &#34;--min&#34;, type=float, default=0.5, required=False, help=&#34;stop clusters at N^min&#34;)
+    parser.add_argument(&#34;-f&#34;, &#34;--file&#34;, type=str, default=&#34;../etc/data/repgrid1.json&#34;, required=False, help=&#34;name of file&#34;)
     parser.add_argument(&#34;-p&#34;, &#34;--p&#34;, type=int, default=2, required=False, help=&#34;distance coefficient&#34;)
-    parser.add_argument(&#34;-S&#34;, &#34;--Sample&#34;, type=int, default=512, required=False, help=&#34;Sampling data size&#34;)
 
     args = parser.parse_args()</code></pre>
 </details>
@@ -1042,6 +1087,22 @@ n - Number of row samples</p>
     print(cli_args)</code></pre>
 </details>
 </dd>
+<dt id="src.utility.print_all_attributes"><code class="name flex">
+<span>def <span class="ident">print_all_attributes</span></span>(<span>obj)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def print_all_attributes(obj):
+    stringToPrint = &#34;{ &#34;
+    for attr, value in vars(obj).items():
+        stringToPrint += str(attr) + &#34;: &#34; + str(value) + &#34; &#34;
+    return stringToPrint + &#34;}&#34;</code></pre>
+</details>
+</dd>
 <dt id="src.utility.rand"><code class="name flex">
 <span>def <span class="ident">rand</span></span>(<span>low, high)</span>
 </code></dt>
@@ -1150,6 +1211,47 @@ fun - callback function to be called for each line in the CSV</p>
         csvFile = csv.reader(file)
         for line in csvFile:
             fun(line)</code></pre>
+</details>
+</dd>
+<dt id="src.utility.repCols"><code class="name flex">
+<span>def <span class="ident">repCols</span></span>(<span>cols)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def repCols(cols):
+    copyCols = deepcopy(cols)
+    for col in cols:
+        col[-1] = str(col[0]) + &#34;:&#34; + str(col[-1])
+        for j in range(1, len(col)):
+            col[j - 1] = col[j]
+        col.pop()
+    cols.insert(0, [&#39;Num&#39; + str(k) for k in range(len(cols[0]))])
+    cols[0][-1] = &#34;thingX&#34;
+    return DATA(cols)</code></pre>
+</details>
+</dd>
+<dt id="src.utility.repColsFunc"><code class="name flex">
+<span>def <span class="ident">repColsFunc</span></span>(<span>)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def repColsFunc():
+    script_dir = os.path.dirname(__file__)
+    full_path = os.path.join(script_dir, args.file)
+    rawData = dofile(full_path)
+    t = repCols(rawData[&#34;cols&#34;])
+    for col in t.cols.all:
+        print(vars(col))
+    for row in t.rows:
+        print(vars(row))</code></pre>
 </details>
 </dd>
 <dt id="src.utility.rint"><code class="name flex">
@@ -1331,6 +1433,24 @@ lvl - how deep the tree is</p>
     return &#34;a&#34; == sym.mid() and 1.379 == round(sym.div(), ndigits=3)</code></pre>
 </details>
 </dd>
+<dt id="src.utility.transpose"><code class="name flex">
+<span>def <span class="ident">transpose</span></span>(<span>t)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def transpose(t):
+    u = []
+    for i in range(0, len(t[0])):
+        u[i] = []
+        for j in range(0, len(t)):
+            u[i][j] = t[j][i]
+    return u</code></pre>
+</details>
+</dd>
 </dl>
 </section>
 <section>
@@ -1348,7 +1468,7 @@ lvl - how deep the tree is</p>
 </ul>
 </li>
 <li><h3><a href="#header-functions">Functions</a></h3>
-<ul class="two-column">
+<ul class="">
 <li><code><a title="src.utility.any" href="#src.utility.any">any</a></code></li>
 <li><code><a title="src.utility.aroundFunc" href="#src.utility.aroundFunc">aroundFunc</a></code></li>
 <li><code><a title="src.utility.cloneFunc" href="#src.utility.cloneFunc">cloneFunc</a></code></li>
@@ -1357,6 +1477,7 @@ lvl - how deep the tree is</p>
 <li><code><a title="src.utility.crashFunc" href="#src.utility.crashFunc">crashFunc</a></code></li>
 <li><code><a title="src.utility.csvFunc" href="#src.utility.csvFunc">csvFunc</a></code></li>
 <li><code><a title="src.utility.dataFunc" href="#src.utility.dataFunc">dataFunc</a></code></li>
+<li><code><a title="src.utility.dofile" href="#src.utility.dofile">dofile</a></code></li>
 <li><code><a title="src.utility.eg" href="#src.utility.eg">eg</a></code></li>
 <li><code><a title="src.utility.getCliArgs" href="#src.utility.getCliArgs">getCliArgs</a></code></li>
 <li><code><a title="src.utility.halfFunc" href="#src.utility.halfFunc">halfFunc</a></code></li>
@@ -1365,14 +1486,18 @@ lvl - how deep the tree is</p>
 <li><code><a title="src.utility.numFunc" href="#src.utility.numFunc">numFunc</a></code></li>
 <li><code><a title="src.utility.oo" href="#src.utility.oo">oo</a></code></li>
 <li><code><a title="src.utility.printCLIvalues" href="#src.utility.printCLIvalues">printCLIvalues</a></code></li>
+<li><code><a title="src.utility.print_all_attributes" href="#src.utility.print_all_attributes">print_all_attributes</a></code></li>
 <li><code><a title="src.utility.rand" href="#src.utility.rand">rand</a></code></li>
 <li><code><a title="src.utility.randFunc" href="#src.utility.randFunc">randFunc</a></code></li>
 <li><code><a title="src.utility.readCSV" href="#src.utility.readCSV">readCSV</a></code></li>
+<li><code><a title="src.utility.repCols" href="#src.utility.repCols">repCols</a></code></li>
+<li><code><a title="src.utility.repColsFunc" href="#src.utility.repColsFunc">repColsFunc</a></code></li>
 <li><code><a title="src.utility.rint" href="#src.utility.rint">rint</a></code></li>
 <li><code><a title="src.utility.show" href="#src.utility.show">show</a></code></li>
 <li><code><a title="src.utility.statsFunc" href="#src.utility.statsFunc">statsFunc</a></code></li>
 <li><code><a title="src.utility.swayFunc" href="#src.utility.swayFunc">swayFunc</a></code></li>
 <li><code><a title="src.utility.symFunc" href="#src.utility.symFunc">symFunc</a></code></li>
+<li><code><a title="src.utility.transpose" href="#src.utility.transpose">transpose</a></code></li>
 </ul>
 </li>
 </ul>
