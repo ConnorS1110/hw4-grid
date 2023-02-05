@@ -60,7 +60,7 @@ def repCols(cols):
     cols[0][-1] = "thingX"
     return DATA(cols)
 
-def show(node, what, cols, nPlaces, lvl=None):
+def show(node, what= None, cols = None, nPlaces = None, lvl=None):
     """
     Function:
         show
@@ -77,13 +77,16 @@ def show(node, what, cols, nPlaces, lvl=None):
     """
     if node:
         lvl = lvl or 0
-        print("| " * lvl + str(len(node["data"].rows)) + " ", end="")
-        if ("left" not in node) or lvl == 0:
-            print(node["data"].stats("mid", node["data"].cols.y, nPlaces))
+        print("|.. " * lvl, end="")
+        if ("left" not in node):
+            print(last(last(node["data"].rows).cells))
         else:
-            print("")
+            print(str(int(100 * node["C"])))
         show(node.get("left", None), what,cols, nPlaces, lvl+1)
         show(node.get("right", None), what,cols,nPlaces, lvl+1)
+
+def last(t):
+    return t[-1]
 
 def rint(lo = None, hi = None):
     """
@@ -490,3 +493,8 @@ def repColsFunc():
         print(vars(col))
     for row in t.rows:
         print(vars(row))
+
+def synonymsFunc():
+    script_dir = os.path.dirname(__file__)
+    full_path = os.path.join(script_dir, args.file)
+    show(repCols(dofile(full_path)["cols"]).cluster())

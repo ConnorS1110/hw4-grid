@@ -143,6 +143,10 @@ class DATA:
         sorted_rows = sorted(rows_with_distance, key=lambda x: x[1])
         return [(row, dist) for row, dist in sorted_rows]
 
+    def furthest(self, row1, rows, cols = None):
+                t = self.around(row1, rows, cols)
+                return t[-1][0]
+
     def half(self, rows = None, cols = None, above = None):
         """
         Function:
@@ -164,17 +168,21 @@ class DATA:
         """
         A, B, left, right, c, mid, some = None, None, None, None, None, None, None
         def project(row):
-            return {'row': row, 'dist': util.cosine(dist(row, A), dist(row, B), c)[1]}
+            x, y = util.cosine(dist(row, A), dist(row, B), c)
+            row.x = row.x or x
+            row.y = row.y or y
+            return {'row': row, 'x': x, 'y': y}
         def dist(row1, row2):
             return self.dist(row1, row2, cols)
         rows = rows or self.rows
-        some = util.many(rows, util.args.Sample)
-        A = above or util.any(some)
-        B = self.around(A, some)[int((util.args.Far * len(rows)) // 1)][0]
+        # some = util.many(rows, util.args.Sample)
+        A = above or util.any(rows)
+        # B = self.around(A, some)[int((util.args.Far * len(rows)) // 1)][0]
+        B = self.furthest(A, rows)
         c = dist(A, B)
         left, right = [], []
         mapVAR = [project(row) for row in rows]
-        sorted_rows = sorted(mapVAR, key=lambda x: x["dist"])
+        sorted_rows = sorted(mapVAR, key=lambda x: x["x"])
         for n, tmp in enumerate(sorted_rows):
             if n <= len(rows) // 2 - 1:
                 left.append(tmp["row"])
@@ -183,7 +191,7 @@ class DATA:
                 right.append(tmp["row"])
         return left, right, A, B, mid, c
 
-    def cluster(self, rows = None, min = None, cols = None, above = None):
+    def cluster(self, rows = None, cols = None, above = None):
         """
         Function:
             cluster
@@ -193,20 +201,19 @@ class DATA:
             self - current DATA instance
             rows - rows to cluster
             cols - cols to cluster
-            min - Determines when to stop splitting
             above - Previous point of split
         Output:
             Clustered rows
         """
         rows = rows if rows else self.rows
-        min = min if min else len(rows) ** util.args.min
+        # min = min if min else len(rows) ** util.args.min
         cols = cols if cols else self.cols.x
         node = {"data": self.clone(rows)}
 
-        if len(rows) > 2 * min:
-            left, right, node["A"], node["B"], node["mid"], _ = self.half(rows, cols, above)
-            node["left"] = self.cluster(left, min, cols, node["A"])
-            node["right"] = self.cluster(right, min, cols, node["B"])
+        if len(rows) >= 2:
+            left, right, node["A"], node["B"], node["mid"], node["C"] = self.half(rows, cols, above)
+            node["left"] = self.cluster(left, cols, node["A"])
+            node["right"] = self.cluster(right, cols, node["B"])
         return node
 
     def sway(self, rows = None, min = None, cols = None, above = None):

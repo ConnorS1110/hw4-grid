@@ -10,4 +10,5 @@ from utility import *
 # eg("half", "1-level bi-clustering", halfFunc)
 # eg("cluster", "N-level bi-clustering", clusterFunc)
 # eg("optimize", "semi-supervised optimization", swayFunc)
-eg("repcols", "checking repcols", repColsFunc)
+# eg("repcols", "checking repcols", repColsFunc)
+eg("synonyms","checking repcols cluster", synonymsFunc)
