@@ -64,7 +64,7 @@ def repRows(t, rows, u=None):
         rows[0][j] = str(rows[0][j]) + ":" + str(s)
     rows.pop()
     for n, row in enumerate(rows):
-        if n==1:
+        if n==0:
             row.append("thingX")
         else:
             u = t["rows"][len(t["rows"]) - n - 1]
@@ -517,5 +517,5 @@ def reprowsFunc():
     rows = repRows(t, transpose(t["cols"]))
     for col in rows.cols.all:
         print(vars(col))
-    for row in rows:
+    for row in rows.rows:
         print(vars(row))
