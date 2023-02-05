@@ -519,3 +519,9 @@ def reprowsFunc():
         print(vars(col))
     for row in rows.rows:
         print(vars(row))
+
+def copyFunc():
+    t1 = {'a': 1, 'b': {'c': 2, 'd': [3]}}
+    t2 = deepcopy(t1)
+    t2["b"]["d"][0] = 10000
+    print("Before: " + str(t1) + "\nAfter: " + str(t2))
