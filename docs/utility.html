@@ -546,7 +546,13 @@ def reprowsFunc():
     for col in rows.cols.all:
         print(vars(col))
     for row in rows.rows:
-        print(vars(row))</code></pre>
+        print(vars(row))
+
+def copyFunc():
+    t1 = {&#39;a&#39;: 1, &#39;b&#39;: {&#39;c&#39;: 2, &#39;d&#39;: [3]}}
+    t2 = deepcopy(t1)
+    t2[&#34;b&#34;][&#34;d&#34;][0] = 10000
+    print(&#34;Before: &#34; + str(t1) + &#34;\nAfter: &#34; + str(t2))</code></pre>
 </details>
 </section>
 <section>
@@ -690,6 +696,22 @@ def reprowsFunc():
     full_path = os.path.join(script_dir, args.file)
     data = DATA(full_path)
     show(data.cluster(), &#34;mid&#34;, data.cols.y, 1)</code></pre>
+</details>
+</dd>
+<dt id="src.utility.copyFunc"><code class="name flex">
+<span>def <span class="ident">copyFunc</span></span>(<span>)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def copyFunc():
+    t1 = {&#39;a&#39;: 1, &#39;b&#39;: {&#39;c&#39;: 2, &#39;d&#39;: [3]}}
+    t2 = deepcopy(t1)
+    t2[&#34;b&#34;][&#34;d&#34;][0] = 10000
+    print(&#34;Before: &#34; + str(t1) + &#34;\nAfter: &#34; + str(t2))</code></pre>
 </details>
 </dd>
 <dt id="src.utility.cosine"><code class="name flex">
@@ -1571,6 +1593,7 @@ lvl - how deep the tree is</p>
 <li><code><a title="src.utility.aroundFunc" href="#src.utility.aroundFunc">aroundFunc</a></code></li>
 <li><code><a title="src.utility.cloneFunc" href="#src.utility.cloneFunc">cloneFunc</a></code></li>
 <li><code><a title="src.utility.clusterFunc" href="#src.utility.clusterFunc">clusterFunc</a></code></li>
+<li><code><a title="src.utility.copyFunc" href="#src.utility.copyFunc">copyFunc</a></code></li>
 <li><code><a title="src.utility.cosine" href="#src.utility.cosine">cosine</a></code></li>
 <li><code><a title="src.utility.crashFunc" href="#src.utility.crashFunc">crashFunc</a></code></li>
 <li><code><a title="src.utility.csvFunc" href="#src.utility.csvFunc">csvFunc</a></code></li>
