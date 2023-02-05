@@ -7,7 +7,7 @@ class NUM:
         self.m2 = 0
         self.lo = float('inf')
         self.hi = float('-inf') # Replaced sys.maxsize
-        self.w = (self.txt.find("-$") and -1) or 1
+        self.w = -1 if self.txt.find("-$") != -1 else 1
 
     def add(self, n):
         """
