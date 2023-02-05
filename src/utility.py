@@ -67,7 +67,7 @@ def repRows(t, rows, u=None):
         if n==0:
             row.append("thingX")
         else:
-            u = t["rows"][len(t["rows"]) - n - 1]
+            u = t["rows"][len(t["rows"]) - n]
             row.append(u[-1])
     return DATA(rows)
 
