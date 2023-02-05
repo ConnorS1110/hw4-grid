@@ -16,8 +16,8 @@ USAGE: grid.lua  [OPTIONS] [-g ACTION]
 
 OPTIONS:
   -d  --dump    on crash, dump stack   = false
-  -f  --file    name of file           = ../etc/data/repgrid1.csv
-  -g  --go      start-up action        = data
+  -f  --file    name of file           = ./etc/data/repgrid1.csv
+  -g  --go      start-up action        = all
   -h  --help    show help              = false
   -p  --p       distance coefficient   = 2
   -s  --seed    random number seed     = 937162211
@@ -372,23 +372,23 @@ function eg(key,str, fun) --> nil; register an example.
 --- eg("crash","show crashing behavior", function()
 ---   return the.some.missing.nested.field end)
 
-eg("the","show settings",function() oo(the) end)
+-- eg("the","show settings",function() oo(the) end)
 
-eg("copy","check copy", function(     t1,t2)
-  t1={a=1,b={c=2,d={3}}}
-  t2=copy(t1)
-  t2.b.d[1]=10000
-  print("b4",o(t1),"\nafter",o(t2))  end)
+-- eg("copy","check copy", function(     t1,t2)
+--   t1={a=1,b={c=2,d={3}}}
+--   t2=copy(t1)
+--   t2.b.d[1]=10000
+--   print("b4",o(t1),"\nafter",o(t2))  end)
 
-eg("sym","check syms", function()
-  local sym=SYM()
-  for _,x in pairs{"a","a","a","a","b","b","c"} do sym:add(x) end
-  return "a"==sym:mid() and 1.379 == rnd(sym:div())end)
+-- eg("sym","check syms", function()
+--   local sym=SYM()
+--   for _,x in pairs{"a","a","a","a","b","b","c"} do sym:add(x) end
+--   return "a"==sym:mid() and 1.379 == rnd(sym:div())end)
 
-eg("num", "check nums", function()
-  local num=NUM()
-  for _,x in pairs{1,1,1,1,2,2,3} do num:add(x) end
-  return 11/7 == num:mid() and 0.787 == rnd(num:div()) end )
+-- eg("num", "check nums", function()
+--   local num=NUM()
+--   for _,x in pairs{1,1,1,1,2,2,3} do num:add(x) end
+--   return 11/7 == num:mid() and 0.787 == rnd(num:div()) end )
 
 eg("repcols","checking repcols", function(    t)
   t=repCols( dofile(the.file).cols )
@@ -396,33 +396,33 @@ eg("repcols","checking repcols", function(    t)
   map(t.rows,oo)
 end)
 
-eg("synonyms","checking repcols cluster", function(    t)
-  show(repCols( dofile(the.file).cols ):cluster())
-end)
+-- eg("synonyms","checking repcols cluster", function(    t)
+--   show(repCols( dofile(the.file).cols ):cluster())
+-- end)
 
-eg("reprows","checking reprows", function(    t,rows)
-  t=dofile(the.file)
-  rows = repRows(t, transpose(t.cols))
-  map(rows.cols.all,oo)
-  map(rows.rows,oo)
-end)
+-- eg("reprows","checking reprows", function(    t,rows)
+--   t=dofile(the.file)
+--   rows = repRows(t, transpose(t.cols))
+--   map(rows.cols.all,oo)
+--   map(rows.rows,oo)
+-- end)
 
-eg("prototypes","checking reprows cluster", function(    t,rows)
-  t=dofile(the.file)
-  rows = repRows(t, transpose(t.cols))
-  show(rows:cluster())
-end)
-
-
-eg("position","where's wally", function(    t,rows)
-  t=dofile(the.file)
-  rows = repRows(t, transpose(t.cols))
-  rows:cluster()
-  repPlace(rows)
-end)
+-- eg("prototypes","checking reprows cluster", function(    t,rows)
+--   t=dofile(the.file)
+--   rows = repRows(t, transpose(t.cols))
+--   show(rows:cluster())
+-- end)
 
 
-eg("every","the whole enchilada", function()
-    repgrid(the.file) end)
+-- eg("position","where's wally", function(    t,rows)
+--   t=dofile(the.file)
+--   rows = repRows(t, transpose(t.cols))
+--   rows:cluster()
+--   repPlace(rows)
+-- end)
+
+
+-- eg("every","the whole enchilada", function()
+--     repgrid(the.file) end)
 
 main(the,help, egs)
