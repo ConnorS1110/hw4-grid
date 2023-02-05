@@ -95,7 +95,7 @@ def repRows(t, rows, u=None):
         if n==0:
             row.append(&#34;thingX&#34;)
         else:
-            u = t[&#34;rows&#34;][len(t[&#34;rows&#34;]) - n - 1]
+            u = t[&#34;rows&#34;][len(t[&#34;rows&#34;]) - n]
             row.append(u[-1])
     return DATA(rows)
 
@@ -1314,7 +1314,7 @@ fun - callback function to be called for each line in the CSV</p>
         if n==0:
             row.append(&#34;thingX&#34;)
         else:
-            u = t[&#34;rows&#34;][len(t[&#34;rows&#34;]) - n - 1]
+            u = t[&#34;rows&#34;][len(t[&#34;rows&#34;]) - n]
             row.append(u[-1])
     return DATA(rows)</code></pre>
 </details>
