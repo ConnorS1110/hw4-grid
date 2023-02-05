@@ -35,7 +35,7 @@
         self.m2 = 0
         self.lo = float(&#39;inf&#39;)
         self.hi = float(&#39;-inf&#39;) # Replaced sys.maxsize
-        self.w = (self.txt.find(&#34;-$&#34;) and -1) or 1
+        self.w = -1 if self.txt.find(&#34;-$&#34;) != -1 else 1
 
     def add(self, n):
         &#34;&#34;&#34;
@@ -126,7 +126,7 @@
         self.m2 = 0
         self.lo = float(&#39;inf&#39;)
         self.hi = float(&#39;-inf&#39;) # Replaced sys.maxsize
-        self.w = (self.txt.find(&#34;-$&#34;) and -1) or 1
+        self.w = -1 if self.txt.find(&#34;-$&#34;) != -1 else 1
 
     def add(self, n):
         &#34;&#34;&#34;
