@@ -88,7 +88,7 @@ def repCols(cols):
     cols[0][-1] = &#34;thingX&#34;
     return DATA(cols)
 
-def show(node, what, cols, nPlaces, lvl=None):
+def show(node, what= None, cols = None, nPlaces = None, lvl=None):
     &#34;&#34;&#34;
     Function:
         show
@@ -105,13 +105,16 @@ def show(node, what, cols, nPlaces, lvl=None):
     &#34;&#34;&#34;
     if node:
         lvl = lvl or 0
-        print(&#34;| &#34; * lvl + str(len(node[&#34;data&#34;].rows)) + &#34; &#34;, end=&#34;&#34;)
-        if (&#34;left&#34; not in node) or lvl == 0:
-            print(node[&#34;data&#34;].stats(&#34;mid&#34;, node[&#34;data&#34;].cols.y, nPlaces))
+        print(&#34;|.. &#34; * lvl, end=&#34;&#34;)
+        if (&#34;left&#34; not in node):
+            print(last(last(node[&#34;data&#34;].rows).cells))
         else:
-            print(&#34;&#34;)
+            print(str(int(100 * node[&#34;C&#34;])))
         show(node.get(&#34;left&#34;, None), what,cols, nPlaces, lvl+1)
         show(node.get(&#34;right&#34;, None), what,cols,nPlaces, lvl+1)
+
+def last(t):
+    return t[-1]
 
 def rint(lo = None, hi = None):
     &#34;&#34;&#34;
@@ -517,7 +520,12 @@ def repColsFunc():
     for col in t.cols.all:
         print(vars(col))
     for row in t.rows:
-        print(vars(row))</code></pre>
+        print(vars(row))
+
+def synonymsFunc():
+    script_dir = os.path.dirname(__file__)
+    full_path = os.path.join(script_dir, args.file)
+    show(repCols(dofile(full_path)[&#34;cols&#34;]).cluster())</code></pre>
 </details>
 </section>
 <section>
@@ -970,6 +978,19 @@ fun - anonymous function to be used as value in map</p>
     return u</code></pre>
 </details>
 </dd>
+<dt id="src.utility.last"><code class="name flex">
+<span>def <span class="ident">last</span></span>(<span>t)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def last(t):
+    return t[-1]</code></pre>
+</details>
+</dd>
 <dt id="src.utility.many"><code class="name flex">
 <span>def <span class="ident">many</span></span>(<span>t, n)</span>
 </code></dt>
@@ -1287,7 +1308,7 @@ high - high value</p>
 </details>
 </dd>
 <dt id="src.utility.show"><code class="name flex">
-<span>def <span class="ident">show</span></span>(<span>node, what, cols, nPlaces, lvl=None)</span>
+<span>def <span class="ident">show</span></span>(<span>node, what=None, cols=None, nPlaces=None, lvl=None)</span>
 </code></dt>
 <dd>
 <div class="desc"><h2 id="function">Function</h2>
@@ -1306,7 +1327,7 @@ lvl - how deep the tree is</p>
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def show(node, what, cols, nPlaces, lvl=None):
+<pre><code class="python">def show(node, what= None, cols = None, nPlaces = None, lvl=None):
     &#34;&#34;&#34;
     Function:
         show
@@ -1323,11 +1344,11 @@ lvl - how deep the tree is</p>
     &#34;&#34;&#34;
     if node:
         lvl = lvl or 0
-        print(&#34;| &#34; * lvl + str(len(node[&#34;data&#34;].rows)) + &#34; &#34;, end=&#34;&#34;)
-        if (&#34;left&#34; not in node) or lvl == 0:
-            print(node[&#34;data&#34;].stats(&#34;mid&#34;, node[&#34;data&#34;].cols.y, nPlaces))
+        print(&#34;|.. &#34; * lvl, end=&#34;&#34;)
+        if (&#34;left&#34; not in node):
+            print(last(last(node[&#34;data&#34;].rows).cells))
         else:
-            print(&#34;&#34;)
+            print(str(int(100 * node[&#34;C&#34;])))
         show(node.get(&#34;left&#34;, None), what,cols, nPlaces, lvl+1)
         show(node.get(&#34;right&#34;, None), what,cols,nPlaces, lvl+1)</code></pre>
 </details>
@@ -1433,6 +1454,21 @@ lvl - how deep the tree is</p>
     return &#34;a&#34; == sym.mid() and 1.379 == round(sym.div(), ndigits=3)</code></pre>
 </details>
 </dd>
+<dt id="src.utility.synonymsFunc"><code class="name flex">
+<span>def <span class="ident">synonymsFunc</span></span>(<span>)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def synonymsFunc():
+    script_dir = os.path.dirname(__file__)
+    full_path = os.path.join(script_dir, args.file)
+    show(repCols(dofile(full_path)[&#34;cols&#34;]).cluster())</code></pre>
+</details>
+</dd>
 <dt id="src.utility.transpose"><code class="name flex">
 <span>def <span class="ident">transpose</span></span>(<span>t)</span>
 </code></dt>
@@ -1482,6 +1518,7 @@ lvl - how deep the tree is</p>
 <li><code><a title="src.utility.getCliArgs" href="#src.utility.getCliArgs">getCliArgs</a></code></li>
 <li><code><a title="src.utility.halfFunc" href="#src.utility.halfFunc">halfFunc</a></code></li>
 <li><code><a title="src.utility.kap" href="#src.utility.kap">kap</a></code></li>
+<li><code><a title="src.utility.last" href="#src.utility.last">last</a></code></li>
 <li><code><a title="src.utility.many" href="#src.utility.many">many</a></code></li>
 <li><code><a title="src.utility.numFunc" href="#src.utility.numFunc">numFunc</a></code></li>
 <li><code><a title="src.utility.oo" href="#src.utility.oo">oo</a></code></li>
@@ -1497,6 +1534,7 @@ lvl - how deep the tree is</p>
 <li><code><a title="src.utility.statsFunc" href="#src.utility.statsFunc">statsFunc</a></code></li>
 <li><code><a title="src.utility.swayFunc" href="#src.utility.swayFunc">swayFunc</a></code></li>
 <li><code><a title="src.utility.symFunc" href="#src.utility.symFunc">symFunc</a></code></li>
+<li><code><a title="src.utility.synonymsFunc" href="#src.utility.synonymsFunc">synonymsFunc</a></code></li>
 <li><code><a title="src.utility.transpose" href="#src.utility.transpose">transpose</a></code></li>
 </ul>
 </li>
