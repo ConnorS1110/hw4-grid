@@ -43,10 +43,8 @@ def dofile(filename):
 
 def transpose(t):
     u = []
-    for i in range(0, len(t[0])):
-        u[i] = []
-        for j in range(0, len(t)):
-            u[i][j] = t[j][i]
+    for i in range(len(t[0])):
+        u.append([t[j][i] for j in range(len(t))])
     return u
 
 def repCols(cols):
@@ -59,6 +57,19 @@ def repCols(cols):
     cols.insert(0, ['Num' + str(k) for k in range(len(cols[0]))])
     cols[0][-1] = "thingX"
     return DATA(cols)
+
+def repRows(t, rows, u=None):
+    rows = deepcopy(rows)
+    for j, s in enumerate(rows[-1]):
+        rows[0][j] = str(rows[0][j]) + ":" + str(s)
+    rows.pop()
+    for n, row in enumerate(rows):
+        if n==1:
+            row.append("thingX")
+        else:
+            u = t["rows"][len(t["rows"]) - n - 1]
+            row.append(u[-1])
+    return DATA(rows)
 
 def show(node, what= None, cols = None, nPlaces = None, lvl=None):
     """
@@ -498,3 +509,13 @@ def synonymsFunc():
     script_dir = os.path.dirname(__file__)
     full_path = os.path.join(script_dir, args.file)
     show(repCols(dofile(full_path)["cols"]).cluster())
+
+def reprowsFunc():
+    script_dir = os.path.dirname(__file__)
+    full_path = os.path.join(script_dir, args.file)
+    t = dofile(full_path)
+    rows = repRows(t, transpose(t["cols"]))
+    for col in rows.cols.all:
+        print(vars(col))
+    for row in rows:
+        print(vars(row))
