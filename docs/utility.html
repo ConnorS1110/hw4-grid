@@ -71,10 +71,8 @@ def dofile(filename):
 
 def transpose(t):
     u = []
-    for i in range(0, len(t[0])):
-        u[i] = []
-        for j in range(0, len(t)):
-            u[i][j] = t[j][i]
+    for i in range(len(t[0])):
+        u.append([t[j][i] for j in range(len(t))])
     return u
 
 def repCols(cols):
@@ -87,6 +85,19 @@ def repCols(cols):
     cols.insert(0, [&#39;Num&#39; + str(k) for k in range(len(cols[0]))])
     cols[0][-1] = &#34;thingX&#34;
     return DATA(cols)
+
+def repRows(t, rows, u=None):
+    rows = deepcopy(rows)
+    for j, s in enumerate(rows[-1]):
+        rows[0][j] = str(rows[0][j]) + &#34;:&#34; + str(s)
+    rows.pop()
+    for n, row in enumerate(rows):
+        if n==0:
+            row.append(&#34;thingX&#34;)
+        else:
+            u = t[&#34;rows&#34;][len(t[&#34;rows&#34;]) - n - 1]
+            row.append(u[-1])
+    return DATA(rows)
 
 def show(node, what= None, cols = None, nPlaces = None, lvl=None):
     &#34;&#34;&#34;
@@ -525,7 +536,17 @@ def repColsFunc():
 def synonymsFunc():
     script_dir = os.path.dirname(__file__)
     full_path = os.path.join(script_dir, args.file)
-    show(repCols(dofile(full_path)[&#34;cols&#34;]).cluster())</code></pre>
+    show(repCols(dofile(full_path)[&#34;cols&#34;]).cluster())
+
+def reprowsFunc():
+    script_dir = os.path.dirname(__file__)
+    full_path = os.path.join(script_dir, args.file)
+    t = dofile(full_path)
+    rows = repRows(t, transpose(t[&#34;cols&#34;]))
+    for col in rows.cols.all:
+        print(vars(col))
+    for row in rows.rows:
+        print(vars(row))</code></pre>
 </details>
 </section>
 <section>
@@ -1275,6 +1296,49 @@ fun - callback function to be called for each line in the CSV</p>
         print(vars(row))</code></pre>
 </details>
 </dd>
+<dt id="src.utility.repRows"><code class="name flex">
+<span>def <span class="ident">repRows</span></span>(<span>t, rows, u=None)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def repRows(t, rows, u=None):
+    rows = deepcopy(rows)
+    for j, s in enumerate(rows[-1]):
+        rows[0][j] = str(rows[0][j]) + &#34;:&#34; + str(s)
+    rows.pop()
+    for n, row in enumerate(rows):
+        if n==0:
+            row.append(&#34;thingX&#34;)
+        else:
+            u = t[&#34;rows&#34;][len(t[&#34;rows&#34;]) - n - 1]
+            row.append(u[-1])
+    return DATA(rows)</code></pre>
+</details>
+</dd>
+<dt id="src.utility.reprowsFunc"><code class="name flex">
+<span>def <span class="ident">reprowsFunc</span></span>(<span>)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def reprowsFunc():
+    script_dir = os.path.dirname(__file__)
+    full_path = os.path.join(script_dir, args.file)
+    t = dofile(full_path)
+    rows = repRows(t, transpose(t[&#34;cols&#34;]))
+    for col in rows.cols.all:
+        print(vars(col))
+    for row in rows.rows:
+        print(vars(row))</code></pre>
+</details>
+</dd>
 <dt id="src.utility.rint"><code class="name flex">
 <span>def <span class="ident">rint</span></span>(<span>lo=None, hi=None)</span>
 </code></dt>
@@ -1480,10 +1544,8 @@ lvl - how deep the tree is</p>
 </summary>
 <pre><code class="python">def transpose(t):
     u = []
-    for i in range(0, len(t[0])):
-        u[i] = []
-        for j in range(0, len(t)):
-            u[i][j] = t[j][i]
+    for i in range(len(t[0])):
+        u.append([t[j][i] for j in range(len(t))])
     return u</code></pre>
 </details>
 </dd>
@@ -1529,6 +1591,8 @@ lvl - how deep the tree is</p>
 <li><code><a title="src.utility.readCSV" href="#src.utility.readCSV">readCSV</a></code></li>
 <li><code><a title="src.utility.repCols" href="#src.utility.repCols">repCols</a></code></li>
 <li><code><a title="src.utility.repColsFunc" href="#src.utility.repColsFunc">repColsFunc</a></code></li>
+<li><code><a title="src.utility.repRows" href="#src.utility.repRows">repRows</a></code></li>
+<li><code><a title="src.utility.reprowsFunc" href="#src.utility.reprowsFunc">reprowsFunc</a></code></li>
 <li><code><a title="src.utility.rint" href="#src.utility.rint">rint</a></code></li>
 <li><code><a title="src.utility.show" href="#src.utility.show">show</a></code></li>
 <li><code><a title="src.utility.statsFunc" href="#src.utility.statsFunc">statsFunc</a></code></li>
