@@ -320,6 +320,7 @@ def getCliArgs():
         None
     """
     global args
+    global Seed
     parser = argparse.ArgumentParser(add_help=False)
     parser.add_argument("-d", "--dump", type=bool, default=False, required=False, help="on crash, dump stack")
     parser.add_argument("-g", "--go", type=str, default="all", required=False, help="start-up action")
@@ -329,6 +330,7 @@ def getCliArgs():
     parser.add_argument("-p", "--p", type=int, default=2, required=False, help="distance coefficient")
 
     args = parser.parse_args()
+    Seed = args.seed
 
 def printCLIvalues():
     """
@@ -559,3 +561,16 @@ def positionFunc():
     rows = repRows(t, transpose(t["cols"]))
     rows.cluster()
     repPlace(rows)
+
+def repgrid(sFile):
+    t = dofile(sFile)
+    rows = repRows(t, transpose(t["cols"]))
+    cols = repCols(t["cols"])
+    show(rows.cluster())
+    show(cols.cluster())
+    repPlace(rows)
+
+def everyFunc():
+    script_dir = os.path.dirname(__file__)
+    full_path = os.path.join(script_dir, args.file)
+    repgrid(full_path)
