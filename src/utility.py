@@ -71,6 +71,25 @@ def repRows(t, rows, u=None):
             row.append(u[-1])
     return DATA(rows)
 
+def repPlace(data):
+    n,g = 20,[]
+    for i in range(n+1):
+        g.append([])
+        for j in range(n+1):
+            g[i].append(" ")
+    maxy = 0
+    print("")
+    for r, row in enumerate(data.rows):
+        c = chr(r+65)
+        print(c, last(row.cells))
+        x, y = int(row.x*n), int(row.y*n)
+        maxy = max(maxy, y)
+        g[y][x] = c
+    print("")
+    for y in range(maxy):
+        print("{" + "".join(g[y]) + "}")
+
+
 def show(node, what= None, cols = None, nPlaces = None, lvl=None):
     """
     Function:
@@ -525,3 +544,18 @@ def copyFunc():
     t2 = deepcopy(t1)
     t2["b"]["d"][0] = 10000
     print("Before: " + str(t1) + "\nAfter: " + str(t2))
+
+def prototypesFunc():
+    script_dir = os.path.dirname(__file__)
+    full_path = os.path.join(script_dir, args.file)
+    t = dofile(full_path)
+    rows = repRows(t, transpose(t["cols"]))
+    show(rows.cluster())
+
+def positionFunc():
+    script_dir = os.path.dirname(__file__)
+    full_path = os.path.join(script_dir, args.file)
+    t = dofile(full_path)
+    rows = repRows(t, transpose(t["cols"]))
+    rows.cluster()
+    repPlace(rows)
