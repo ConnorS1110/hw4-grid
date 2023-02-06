@@ -348,6 +348,7 @@ def getCliArgs():
         None
     &#34;&#34;&#34;
     global args
+    global Seed
     parser = argparse.ArgumentParser(add_help=False)
     parser.add_argument(&#34;-d&#34;, &#34;--dump&#34;, type=bool, default=False, required=False, help=&#34;on crash, dump stack&#34;)
     parser.add_argument(&#34;-g&#34;, &#34;--go&#34;, type=str, default=&#34;all&#34;, required=False, help=&#34;start-up action&#34;)
@@ -357,6 +358,7 @@ def getCliArgs():
     parser.add_argument(&#34;-p&#34;, &#34;--p&#34;, type=int, default=2, required=False, help=&#34;distance coefficient&#34;)
 
     args = parser.parse_args()
+    Seed = args.seed
 
 def printCLIvalues():
     &#34;&#34;&#34;
@@ -586,7 +588,20 @@ def positionFunc():
     t = dofile(full_path)
     rows = repRows(t, transpose(t[&#34;cols&#34;]))
     rows.cluster()
-    repPlace(rows)</code></pre>
+    repPlace(rows)
+
+def repgrid(sFile):
+    t = dofile(sFile)
+    rows = repRows(t, transpose(t[&#34;cols&#34;]))
+    cols = repCols(t[&#34;cols&#34;])
+    show(rows.cluster())
+    show(cols.cluster())
+    repPlace(rows)
+
+def everyFunc():
+    script_dir = os.path.dirname(__file__)
+    full_path = os.path.join(script_dir, args.file)
+    repgrid(full_path)</code></pre>
 </details>
 </section>
 <section>
@@ -943,6 +958,21 @@ fun - callback function to use for test case</p>
     help += f&#34;  -g {key}    {string}&#34;</code></pre>
 </details>
 </dd>
+<dt id="src.utility.everyFunc"><code class="name flex">
+<span>def <span class="ident">everyFunc</span></span>(<span>)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def everyFunc():
+    script_dir = os.path.dirname(__file__)
+    full_path = os.path.join(script_dir, args.file)
+    repgrid(full_path)</code></pre>
+</details>
+</dd>
 <dt id="src.utility.getCliArgs"><code class="name flex">
 <span>def <span class="ident">getCliArgs</span></span>(<span>)</span>
 </code></dt>
@@ -971,6 +1001,7 @@ fun - callback function to use for test case</p>
         None
     &#34;&#34;&#34;
     global args
+    global Seed
     parser = argparse.ArgumentParser(add_help=False)
     parser.add_argument(&#34;-d&#34;, &#34;--dump&#34;, type=bool, default=False, required=False, help=&#34;on crash, dump stack&#34;)
     parser.add_argument(&#34;-g&#34;, &#34;--go&#34;, type=str, default=&#34;all&#34;, required=False, help=&#34;start-up action&#34;)
@@ -979,7 +1010,8 @@ fun - callback function to use for test case</p>
     parser.add_argument(&#34;-f&#34;, &#34;--file&#34;, type=str, default=&#34;../etc/data/repgrid1.json&#34;, required=False, help=&#34;name of file&#34;)
     parser.add_argument(&#34;-p&#34;, &#34;--p&#34;, type=int, default=2, required=False, help=&#34;distance coefficient&#34;)
 
-    args = parser.parse_args()</code></pre>
+    args = parser.parse_args()
+    Seed = args.seed</code></pre>
 </details>
 </dd>
 <dt id="src.utility.halfFunc"><code class="name flex">
@@ -1438,6 +1470,24 @@ fun - callback function to be called for each line in the CSV</p>
     return DATA(rows)</code></pre>
 </details>
 </dd>
+<dt id="src.utility.repgrid"><code class="name flex">
+<span>def <span class="ident">repgrid</span></span>(<span>sFile)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def repgrid(sFile):
+    t = dofile(sFile)
+    rows = repRows(t, transpose(t[&#34;cols&#34;]))
+    cols = repCols(t[&#34;cols&#34;])
+    show(rows.cluster())
+    show(cols.cluster())
+    repPlace(rows)</code></pre>
+</details>
+</dd>
 <dt id="src.utility.reprowsFunc"><code class="name flex">
 <span>def <span class="ident">reprowsFunc</span></span>(<span>)</span>
 </code></dt>
@@ -1697,6 +1747,7 @@ lvl - how deep the tree is</p>
 <li><code><a title="src.utility.dataFunc" href="#src.utility.dataFunc">dataFunc</a></code></li>
 <li><code><a title="src.utility.dofile" href="#src.utility.dofile">dofile</a></code></li>
 <li><code><a title="src.utility.eg" href="#src.utility.eg">eg</a></code></li>
+<li><code><a title="src.utility.everyFunc" href="#src.utility.everyFunc">everyFunc</a></code></li>
 <li><code><a title="src.utility.getCliArgs" href="#src.utility.getCliArgs">getCliArgs</a></code></li>
 <li><code><a title="src.utility.halfFunc" href="#src.utility.halfFunc">halfFunc</a></code></li>
 <li><code><a title="src.utility.kap" href="#src.utility.kap">kap</a></code></li>
@@ -1715,6 +1766,7 @@ lvl - how deep the tree is</p>
 <li><code><a title="src.utility.repColsFunc" href="#src.utility.repColsFunc">repColsFunc</a></code></li>
 <li><code><a title="src.utility.repPlace" href="#src.utility.repPlace">repPlace</a></code></li>
 <li><code><a title="src.utility.repRows" href="#src.utility.repRows">repRows</a></code></li>
+<li><code><a title="src.utility.repgrid" href="#src.utility.repgrid">repgrid</a></code></li>
 <li><code><a title="src.utility.reprowsFunc" href="#src.utility.reprowsFunc">reprowsFunc</a></code></li>
 <li><code><a title="src.utility.rint" href="#src.utility.rint">rint</a></code></li>
 <li><code><a title="src.utility.show" href="#src.utility.show">show</a></code></li>
