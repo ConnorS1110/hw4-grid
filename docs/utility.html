@@ -99,6 +99,25 @@ def repRows(t, rows, u=None):
             row.append(u[-1])
     return DATA(rows)
 
+def repPlace(data):
+    n,g = 20,[]
+    for i in range(n+1):
+        g.append([])
+        for j in range(n+1):
+            g[i].append(&#34; &#34;)
+    maxy = 0
+    print(&#34;&#34;)
+    for r, row in enumerate(data.rows):
+        c = chr(r+65)
+        print(c, last(row.cells))
+        x, y = int(row.x*n), int(row.y*n)
+        maxy = max(maxy, y)
+        g[y][x] = c
+    print(&#34;&#34;)
+    for y in range(maxy):
+        print(&#34;{&#34; + &#34;&#34;.join(g[y]) + &#34;}&#34;)
+
+
 def show(node, what= None, cols = None, nPlaces = None, lvl=None):
     &#34;&#34;&#34;
     Function:
@@ -552,7 +571,22 @@ def copyFunc():
     t1 = {&#39;a&#39;: 1, &#39;b&#39;: {&#39;c&#39;: 2, &#39;d&#39;: [3]}}
     t2 = deepcopy(t1)
     t2[&#34;b&#34;][&#34;d&#34;][0] = 10000
-    print(&#34;Before: &#34; + str(t1) + &#34;\nAfter: &#34; + str(t2))</code></pre>
+    print(&#34;Before: &#34; + str(t1) + &#34;\nAfter: &#34; + str(t2))
+
+def prototypesFunc():
+    script_dir = os.path.dirname(__file__)
+    full_path = os.path.join(script_dir, args.file)
+    t = dofile(full_path)
+    rows = repRows(t, transpose(t[&#34;cols&#34;]))
+    show(rows.cluster())
+
+def positionFunc():
+    script_dir = os.path.dirname(__file__)
+    full_path = os.path.join(script_dir, args.file)
+    t = dofile(full_path)
+    rows = repRows(t, transpose(t[&#34;cols&#34;]))
+    rows.cluster()
+    repPlace(rows)</code></pre>
 </details>
 </section>
 <section>
@@ -1115,6 +1149,24 @@ n - Number of row samples</p>
     pass</code></pre>
 </details>
 </dd>
+<dt id="src.utility.positionFunc"><code class="name flex">
+<span>def <span class="ident">positionFunc</span></span>(<span>)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def positionFunc():
+    script_dir = os.path.dirname(__file__)
+    full_path = os.path.join(script_dir, args.file)
+    t = dofile(full_path)
+    rows = repRows(t, transpose(t[&#34;cols&#34;]))
+    rows.cluster()
+    repPlace(rows)</code></pre>
+</details>
+</dd>
 <dt id="src.utility.printCLIvalues"><code class="name flex">
 <span>def <span class="ident">printCLIvalues</span></span>(<span>)</span>
 </code></dt>
@@ -1165,6 +1217,23 @@ n - Number of row samples</p>
     for attr, value in vars(obj).items():
         stringToPrint += str(attr) + &#34;: &#34; + str(value) + &#34; &#34;
     return stringToPrint + &#34;}&#34;</code></pre>
+</details>
+</dd>
+<dt id="src.utility.prototypesFunc"><code class="name flex">
+<span>def <span class="ident">prototypesFunc</span></span>(<span>)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def prototypesFunc():
+    script_dir = os.path.dirname(__file__)
+    full_path = os.path.join(script_dir, args.file)
+    t = dofile(full_path)
+    rows = repRows(t, transpose(t[&#34;cols&#34;]))
+    show(rows.cluster())</code></pre>
 </details>
 </dd>
 <dt id="src.utility.rand"><code class="name flex">
@@ -1316,6 +1385,34 @@ fun - callback function to be called for each line in the CSV</p>
         print(vars(col))
     for row in t.rows:
         print(vars(row))</code></pre>
+</details>
+</dd>
+<dt id="src.utility.repPlace"><code class="name flex">
+<span>def <span class="ident">repPlace</span></span>(<span>data)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def repPlace(data):
+    n,g = 20,[]
+    for i in range(n+1):
+        g.append([])
+        for j in range(n+1):
+            g[i].append(&#34; &#34;)
+    maxy = 0
+    print(&#34;&#34;)
+    for r, row in enumerate(data.rows):
+        c = chr(r+65)
+        print(c, last(row.cells))
+        x, y = int(row.x*n), int(row.y*n)
+        maxy = max(maxy, y)
+        g[y][x] = c
+    print(&#34;&#34;)
+    for y in range(maxy):
+        print(&#34;{&#34; + &#34;&#34;.join(g[y]) + &#34;}&#34;)</code></pre>
 </details>
 </dd>
 <dt id="src.utility.repRows"><code class="name flex">
@@ -1607,13 +1704,16 @@ lvl - how deep the tree is</p>
 <li><code><a title="src.utility.many" href="#src.utility.many">many</a></code></li>
 <li><code><a title="src.utility.numFunc" href="#src.utility.numFunc">numFunc</a></code></li>
 <li><code><a title="src.utility.oo" href="#src.utility.oo">oo</a></code></li>
+<li><code><a title="src.utility.positionFunc" href="#src.utility.positionFunc">positionFunc</a></code></li>
 <li><code><a title="src.utility.printCLIvalues" href="#src.utility.printCLIvalues">printCLIvalues</a></code></li>
 <li><code><a title="src.utility.print_all_attributes" href="#src.utility.print_all_attributes">print_all_attributes</a></code></li>
+<li><code><a title="src.utility.prototypesFunc" href="#src.utility.prototypesFunc">prototypesFunc</a></code></li>
 <li><code><a title="src.utility.rand" href="#src.utility.rand">rand</a></code></li>
 <li><code><a title="src.utility.randFunc" href="#src.utility.randFunc">randFunc</a></code></li>
 <li><code><a title="src.utility.readCSV" href="#src.utility.readCSV">readCSV</a></code></li>
 <li><code><a title="src.utility.repCols" href="#src.utility.repCols">repCols</a></code></li>
 <li><code><a title="src.utility.repColsFunc" href="#src.utility.repColsFunc">repColsFunc</a></code></li>
+<li><code><a title="src.utility.repPlace" href="#src.utility.repPlace">repPlace</a></code></li>
 <li><code><a title="src.utility.repRows" href="#src.utility.repRows">repRows</a></code></li>
 <li><code><a title="src.utility.reprowsFunc" href="#src.utility.reprowsFunc">reprowsFunc</a></code></li>
 <li><code><a title="src.utility.rint" href="#src.utility.rint">rint</a></code></li>
