@@ -1,0 +1,46 @@
+57
+|.. 43
+|.. |.. Inception
+|.. |.. 48
+|.. |.. |.. Titanic
+|.. |.. |.. Indiana Jones
+|.. 55
+|.. |.. Minions
+|.. |.. 23
+|.. |.. |.. Avengers: Endgame
+|.. |.. |.. Avatar
+56
+|.. 45
+|.. |.. 36
+|.. |.. |.. KidsFilm:AdultsFilm
+|.. |.. |.. AnimatedFilm:LiveActionFilm
+|.. |.. 46
+|.. |.. |.. ShortFilm:LongFilm
+|.. |.. |.. 46
+|.. |.. |.. |.. WatchAtHomeFilm:WatchInTheaterFilm
+|.. |.. |.. |.. LowBudgetFilm:HighBudgetFilm
+|.. 43
+|.. |.. 40
+|.. |.. |.. RomaticFilm:ActionFilm
+|.. |.. |.. WatchItOnceFilm:WatchItManyTimesFilm
+|.. |.. 53
+|.. |.. |.. SetInPastFilm:SetInFutureFilm
+|.. |.. |.. 42
+|.. |.. |.. |.. PlayfulFilm:SuspensefulFilm
+|.. |.. |.. |.. BadFilm:GoodFilm
+
+A Avatar
+B Avengers: Endgame
+C Titanic
+D Indiana Jones
+E Inception
+F Minions
+
+{E          F         }
+{                     }
+{                     }
+{                     }
+{                     }
+{  B                  }
+{                     }
+{    A                }
