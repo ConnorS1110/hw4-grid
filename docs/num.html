@@ -85,9 +85,32 @@
         return (self.m2 &lt; 0 or self.n &lt; 2) and 0 or (self.m2 / (self.n - 1)) ** 0.5
 
     def norm(self, n):
+        &#34;&#34;&#34;
+        Function:
+            norm
+        Description:
+            Normalizes a value
+        Input:
+            self - current NUM instance
+            n - value to normalize
+        Output:
+            Normalized value
+        &#34;&#34;&#34;
         return n if n == &#34;?&#34; else (float(n) - self.lo) / (self.hi - self.lo + 1 + 10 ** (-32))
 
     def dist(self, n1, n2):
+        &#34;&#34;&#34;
+        Function:
+            dist
+        Description:
+            Finds normalized positive difference between 2 values
+        Input:
+            self - current NUM instance
+            n1 - First value
+            n2 - Second value
+        Output:
+            Normalized + difference between n1 and n2
+        &#34;&#34;&#34;
         if n1 == &#34;?&#34; and n2 == &#34;?&#34;:
             return 1
         n1, n2 = self.norm(n1), self.norm(n2)
@@ -176,9 +199,32 @@
         return (self.m2 &lt; 0 or self.n &lt; 2) and 0 or (self.m2 / (self.n - 1)) ** 0.5
 
     def norm(self, n):
+        &#34;&#34;&#34;
+        Function:
+            norm
+        Description:
+            Normalizes a value
+        Input:
+            self - current NUM instance
+            n - value to normalize
+        Output:
+            Normalized value
+        &#34;&#34;&#34;
         return n if n == &#34;?&#34; else (float(n) - self.lo) / (self.hi - self.lo + 1 + 10 ** (-32))
 
     def dist(self, n1, n2):
+        &#34;&#34;&#34;
+        Function:
+            dist
+        Description:
+            Finds normalized positive difference between 2 values
+        Input:
+            self - current NUM instance
+            n1 - First value
+            n2 - Second value
+        Output:
+            Normalized + difference between n1 and n2
+        &#34;&#34;&#34;
         if n1 == &#34;?&#34; and n2 == &#34;?&#34;:
             return 1
         n1, n2 = self.norm(n1), self.norm(n2)
@@ -233,12 +279,33 @@ n - value to add</p>
 <span>def <span class="ident">dist</span></span>(<span>self, n1, n2)</span>
 </code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><h2 id="function">Function</h2>
+<p>dist</p>
+<h2 id="description">Description</h2>
+<p>Finds normalized positive difference between 2 values</p>
+<h2 id="input">Input</h2>
+<p>self - current NUM instance
+n1 - First value
+n2 - Second value</p>
+<h2 id="output">Output</h2>
+<p>Normalized + difference between n1 and n2</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def dist(self, n1, n2):
+    &#34;&#34;&#34;
+    Function:
+        dist
+    Description:
+        Finds normalized positive difference between 2 values
+    Input:
+        self - current NUM instance
+        n1 - First value
+        n2 - Second value
+    Output:
+        Normalized + difference between n1 and n2
+    &#34;&#34;&#34;
     if n1 == &#34;?&#34; and n2 == &#34;?&#34;:
         return 1
     n1, n2 = self.norm(n1), self.norm(n2)
@@ -313,12 +380,31 @@ n - value to add</p>
 <span>def <span class="ident">norm</span></span>(<span>self, n)</span>
 </code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><h2 id="function">Function</h2>
+<p>norm</p>
+<h2 id="description">Description</h2>
+<p>Normalizes a value</p>
+<h2 id="input">Input</h2>
+<p>self - current NUM instance
+n - value to normalize</p>
+<h2 id="output">Output</h2>
+<p>Normalized value</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def norm(self, n):
+    &#34;&#34;&#34;
+    Function:
+        norm
+    Description:
+        Normalizes a value
+    Input:
+        self - current NUM instance
+        n - value to normalize
+    Output:
+        Normalized value
+    &#34;&#34;&#34;
     return n if n == &#34;?&#34; else (float(n) - self.lo) / (self.hi - self.lo + 1 + 10 ** (-32))</code></pre>
 </details>
 </dd>

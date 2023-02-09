@@ -34,7 +34,6 @@ import os
 from num import NUM
 from sym import SYM
 from data import DATA
-from math import floor
 from copy import deepcopy
 
 help = &#34;&#34;&#34;
@@ -60,33 +59,84 @@ egs = {}
 n = 0
 
 def print_all_attributes(obj):
+    &#34;&#34;&#34;
+    Function:
+        print_all_attributes
+    Description:
+        Prints all attributes of an object
+    Input:
+        obj - Object whose class attributes will be printed
+    Output:
+        Formatted string of all class instance attributes and their values
+    &#34;&#34;&#34;
     stringToPrint = &#34;{ &#34;
     for attr, value in vars(obj).items():
         stringToPrint += str(attr) + &#34;: &#34; + str(value) + &#34; &#34;
     return stringToPrint + &#34;}&#34;
 
 def dofile(filename):
+    &#34;&#34;&#34;
+    Function:
+        dofile
+    Description:
+        Opens .json file and returns data
+    Input:
+        filename - path to .json file to read
+    Output:
+        Data from .json file
+    &#34;&#34;&#34;
     with open(filename) as f:
         return json.load(f)
 
 def transpose(t):
+    &#34;&#34;&#34;
+    Function:
+        transpose
+    Description:
+        Transposes matrix
+    Input:
+        t - Matrix to be transposed
+    Output:
+        u - Transposed matrix
+    &#34;&#34;&#34;
     u = []
     for i in range(len(t[0])):
         u.append([t[j][i] for j in range(len(t))])
     return u
 
 def repCols(cols):
+    &#34;&#34;&#34;
+    Function:
+        repCols
+    Description:
+        Turns repgrid cols into DATA object
+    Input:
+        cols - Cols to be manipulated for DATA object conversion
+    Output:
+        DATA object of cols
+    &#34;&#34;&#34;
     copyCols = deepcopy(cols)
-    for col in cols:
+    for col in copyCols:
         col[-1] = str(col[0]) + &#34;:&#34; + str(col[-1])
         for j in range(1, len(col)):
             col[j - 1] = col[j]
         col.pop()
-    cols.insert(0, [&#39;Num&#39; + str(k) for k in range(len(cols[0]))])
-    cols[0][-1] = &#34;thingX&#34;
-    return DATA(cols)
+    copyCols.insert(0, [&#39;Num&#39; + str(k) for k in range(len(copyCols[0]))])
+    copyCols[0][-1] = &#34;thingX&#34;
+    return DATA(copyCols)
 
 def repRows(t, rows, u=None):
+    &#34;&#34;&#34;
+    Function:
+        repRows
+    Description:
+        Turns repgrid rows into DATA object
+    Input:
+        t - Dictionary of repgrid data
+        rows - Rows to be manipulated for DATA object conversion
+    Output:
+        DATA object of rows
+    &#34;&#34;&#34;
     rows = deepcopy(rows)
     for j, s in enumerate(rows[-1]):
         rows[0][j] = str(rows[0][j]) + &#34;:&#34; + str(s)
@@ -100,6 +150,16 @@ def repRows(t, rows, u=None):
     return DATA(rows)
 
 def repPlace(data):
+    &#34;&#34;&#34;
+    Function:
+        repPlace
+    Description:
+        Turns a clustered repgrid object and turns it into a 2d grid
+    Input:
+        data - repgrid data
+    Output:
+        None
+    &#34;&#34;&#34;
     n,g = 20,[]
     for i in range(n+1):
         g.append([])
@@ -117,6 +177,23 @@ def repPlace(data):
     for y in range(maxy):
         print(&#34;{&#34; + &#34;&#34;.join(g[y]) + &#34;}&#34;)
 
+def repgrid(sFile):
+    &#34;&#34;&#34;
+    Function:
+        repgrid
+    Description:
+        Clusters rows and cols and outputs a 2d grid representation of this clustering
+    Input:
+        sFile - .json file to be used as data
+    Output:
+        None
+    &#34;&#34;&#34;
+    t = dofile(sFile)
+    rows = repRows(t, transpose(t[&#34;cols&#34;]))
+    cols = repCols(t[&#34;cols&#34;])
+    show(rows.cluster())
+    show(cols.cluster())
+    repPlace(rows)
 
 def show(node, what= None, cols = None, nPlaces = None, lvl=None):
     &#34;&#34;&#34;
@@ -144,6 +221,16 @@ def show(node, what= None, cols = None, nPlaces = None, lvl=None):
         show(node.get(&#34;right&#34;, None), what,cols,nPlaces, lvl+1)
 
 def last(t):
+    &#34;&#34;&#34;
+    Function:
+        last
+    Description:
+        Returns last element in a list
+    Input:
+        t - List to return last element from
+    Output:
+        Last element in t
+    &#34;&#34;&#34;
     return t[-1]
 
 def rint(lo = None, hi = None):
@@ -235,24 +322,6 @@ def cosine(a, b, c):
     y = (abs(a ** 2 - x2 ** 2)) ** 0.5
     return x2, y
 
-
-def many(t, n):
-    &#34;&#34;&#34;
-    Function:
-        many
-    Description:
-        Creates a list of random rows
-    Input:
-        t - DATA object
-        n - Number of row samples
-    Output:
-        u - list of random n rows from t
-    &#34;&#34;&#34;
-    u = []
-    for i in range(1, n + 1):
-        u.append(any(t))
-    return u
-
 def any(t):
     &#34;&#34;&#34;
     Function:
@@ -266,29 +335,6 @@ def any(t):
     &#34;&#34;&#34;
     rintVal = rint(None, len(t) - 1)
     return t[rintVal]
-
-def randFunc():
-    &#34;&#34;&#34;
-    Function:
-        randFunc
-    Description:
-        Callback function to test the rand function
-    Input:
-        None
-    Output:
-        checks if m1 equals m2 and that they round to 0.5 as a boolean
-    &#34;&#34;&#34;
-    global args
-    global Seed
-    num1, num2 = NUM(), NUM()
-    Seed = args.seed
-    for i in range(10**3):
-        num1.add(rand(0, 1))
-    Seed = args.seed
-    for i in range(10**3):
-        num2.add(rand(0, 1))
-    m1, m2 = round(num1.mid(), 10), round(num2.mid(), 10)
-    return m1 == m2 and 0.5 == round(m1, 1)
 
 def symFunc():
     &#34;&#34;&#34;
@@ -379,26 +425,6 @@ def printCLIvalues():
     cli_args[&#34;file&#34;] = args.file
     print(cli_args)
 
-def csvFunc():
-    &#34;&#34;&#34;
-    Function:
-        csvFunc
-    Description:
-        Callback function to test readCSV() function
-    Input:
-        None
-    Output:
-        there are 8 * 399 elements in the default csv file in etc/data/auto93.csv
-    &#34;&#34;&#34;
-    global n
-    def fun(t):
-        global n
-        n += len(t)
-    script_dir = os.path.dirname(__file__)
-    full_path = os.path.join(script_dir, args.file)
-    readCSV(full_path, fun)
-    return n == 8 * 399
-
 def readCSV(sFilename, fun):
     &#34;&#34;&#34;
     Function:
@@ -416,135 +442,17 @@ def readCSV(sFilename, fun):
         for line in csvFile:
             fun(line)
 
-def dataFunc():
-    &#34;&#34;&#34;
-    Function:
-        dataFunc
-    Description:
-        Callback function to test DATA class
-    Input:
-        None
-    Output:
-        DATA instance is created and has correct property values when reading the default CSV file at etc/data/auto93.csv
-    &#34;&#34;&#34;
-    script_dir = os.path.dirname(__file__)
-    full_path = os.path.join(script_dir, args.file)
-    data = DATA(full_path)
-    return (len(data.rows) == 398 and
-    data.cols.y[1].w == -1 and
-    data.cols.x[1].at == 1 and
-    len(data.cols.x) == 4
-    )
-
-def statsFunc():
-    &#34;&#34;&#34;
-    Function:
-        statsFunc
-    Description:
-        Callback function to test stats function in DATA class
-    Input:
-        None
-    Output:
-        the statistics for the DATA instance using the default file at etc/data/auto93.csv are printed to the console
-    &#34;&#34;&#34;
-    script_dir = os.path.dirname(__file__)
-    full_path = os.path.join(script_dir, args.file)
-    data = DATA(full_path)
-    for k, cols in {&#39;y&#39;: data.cols.y, &#39;x&#39;: data.cols.x}.items():
-        print(k, &#34;\tmid&#34;, (data.stats(&#34;mid&#34;, cols, 2)))
-        print(&#34;&#34;, &#34;\tdiv&#34;, (data.stats(&#34;div&#34;, cols, 2)))
-
-def cloneFunc():
-    &#34;&#34;&#34;
-    Function:
-        cloneFunc
-    Description:
-        Callback function to test clone function in DATA class
-    Input:
-        None
-    Output:
-        the cloned DATA object contains the same metadata as the original object
-    &#34;&#34;&#34;
-    script_dir = os.path.dirname(__file__)
-    full_path = os.path.join(script_dir, args.file)
-    data1 = DATA(full_path)
-    data2 = data1.clone(data1.rows)
-    return (len(data1.rows) == len(data2.rows) and
-            data1.cols.y[1].w == data2.cols.y[1].w and
-            data1.cols.x[1].at == data2.cols.x[1].at and
-            len(data1.cols.x) == len(data2.cols.x))
-
-def clusterFunc():
-    &#34;&#34;&#34;
-    Function:
-        clusterFunc
-    Description:
-        Callback function to test cluster function in DATA class
-    Input:
-        None
-    Output:
-        the correct data is output from the cluster function
-    &#34;&#34;&#34;
-    script_dir = os.path.dirname(__file__)
-    full_path = os.path.join(script_dir, args.file)
-    data = DATA(full_path)
-    show(data.cluster(), &#34;mid&#34;, data.cols.y, 1)
-
-def swayFunc():
-    &#34;&#34;&#34;
-    Function:
-        swayFunc
-    Description:
-        Callback function to test sway function in DATA class
-    Input:
-        None
-    Output:
-        the correct data is output from the sway function
-    &#34;&#34;&#34;
-    script_dir = os.path.dirname(__file__)
-    full_path = os.path.join(script_dir, args.file)
-    data = DATA(full_path)
-    show(data.sway(), &#34;mid&#34;, data.cols.y, 1)
-
-def aroundFunc():
-    &#34;&#34;&#34;
-    Function:
-        aroundFunc
-    Description:
-        Callback function to test around function in DATA class
-    Input:
-        None
-    Output:
-        the rows are correctly sorted for the DATA object
-    &#34;&#34;&#34;
-    script_dir = os.path.dirname(__file__)
-    full_path = os.path.join(script_dir, args.file)
-    data = DATA(full_path)
-    for n, t in enumerate(data.around(data.rows[1])):
-        if n % 50 == 0:
-            print(n, round(t[1], 2), t[0].cells)
-
-def halfFunc():
-    &#34;&#34;&#34;
-    Function:
-        halfFunc
-    Description:
-        Callback function to test half function in DATA class
-    Input:
-        None
-    Output:
-        the DATA object is correctly split in half
-    &#34;&#34;&#34;
-    script_dir = os.path.dirname(__file__)
-    full_path = os.path.join(script_dir, args.file)
-    data = DATA(full_path)
-    left, right, A, B, mid, c = data.half()
-    print(len(left), len(right), len(data.rows))
-    print(A.cells, c)
-    print(mid.cells)
-    print(B.cells)
-
 def repColsFunc():
+    &#34;&#34;&#34;
+    Function:
+        repColsFunc
+    Description:
+        Callback function to test repCols function
+    Input:
+        None
+    Output:
+        the DATA object is created using .json repgrid cols data
+    &#34;&#34;&#34;
     script_dir = os.path.dirname(__file__)
     full_path = os.path.join(script_dir, args.file)
     rawData = dofile(full_path)
@@ -555,11 +463,31 @@ def repColsFunc():
         print(vars(row))
 
 def synonymsFunc():
+    &#34;&#34;&#34;
+    Function:
+        synonymsFunc
+    Description:
+        Callback function to test clustering of repCols data
+    Input:
+        None
+    Output:
+        the synonyms of cols found through clustering
+    &#34;&#34;&#34;
     script_dir = os.path.dirname(__file__)
     full_path = os.path.join(script_dir, args.file)
     show(repCols(dofile(full_path)[&#34;cols&#34;]).cluster())
 
 def reprowsFunc():
+    &#34;&#34;&#34;
+    Function:
+        reprowsFunc
+    Description:
+        Callback function to test repRows function
+    Input:
+        None
+    Output:
+        the DATA object is created using .json repgrid rows data
+    &#34;&#34;&#34;
     script_dir = os.path.dirname(__file__)
     full_path = os.path.join(script_dir, args.file)
     t = dofile(full_path)
@@ -570,12 +498,32 @@ def reprowsFunc():
         print(vars(row))
 
 def copyFunc():
+    &#34;&#34;&#34;
+    Function:
+        copyFunc
+    Description:
+        Callback function to test deepcopy
+    Input:
+        None
+    Output:
+        the dictionary is successfully copied and manipulated
+    &#34;&#34;&#34;
     t1 = {&#39;a&#39;: 1, &#39;b&#39;: {&#39;c&#39;: 2, &#39;d&#39;: [3]}}
     t2 = deepcopy(t1)
     t2[&#34;b&#34;][&#34;d&#34;][0] = 10000
     print(&#34;Before: &#34; + str(t1) + &#34;\nAfter: &#34; + str(t2))
 
 def prototypesFunc():
+    &#34;&#34;&#34;
+    Function:
+        prototypesFunc
+    Description:
+        Callback function to test clustering of rows data
+    Input:
+        None
+    Output:
+        the synonyms of rows found through clustering
+    &#34;&#34;&#34;
     script_dir = os.path.dirname(__file__)
     full_path = os.path.join(script_dir, args.file)
     t = dofile(full_path)
@@ -583,6 +531,16 @@ def prototypesFunc():
     show(rows.cluster())
 
 def positionFunc():
+    &#34;&#34;&#34;
+    Function:
+        positionFunc
+    Description:
+        Callback function to test repPlace
+    Input:
+        None
+    Output:
+        the grid after clustering rows is displayed
+    &#34;&#34;&#34;
     script_dir = os.path.dirname(__file__)
     full_path = os.path.join(script_dir, args.file)
     t = dofile(full_path)
@@ -590,15 +548,17 @@ def positionFunc():
     rows.cluster()
     repPlace(rows)
 
-def repgrid(sFile):
-    t = dofile(sFile)
-    rows = repRows(t, transpose(t[&#34;cols&#34;]))
-    cols = repCols(t[&#34;cols&#34;])
-    show(rows.cluster())
-    show(cols.cluster())
-    repPlace(rows)
-
 def everyFunc():
+    &#34;&#34;&#34;
+    Function:
+        everyFunc
+    Description:
+        Callback function to test repgrid
+    Input:
+        None
+    Output:
+        the rows and cols are clustered and displayed, along with the 2d grid
+    &#34;&#34;&#34;
     script_dir = os.path.dirname(__file__)
     full_path = os.path.join(script_dir, args.file)
     repgrid(full_path)</code></pre>
@@ -642,121 +602,33 @@ def everyFunc():
     return t[rintVal]</code></pre>
 </details>
 </dd>
-<dt id="src.utility.aroundFunc"><code class="name flex">
-<span>def <span class="ident">aroundFunc</span></span>(<span>)</span>
-</code></dt>
-<dd>
-<div class="desc"><h2 id="function">Function</h2>
-<p>aroundFunc</p>
-<h2 id="description">Description</h2>
-<p>Callback function to test around function in DATA class</p>
-<h2 id="input">Input</h2>
-<p>None</p>
-<h2 id="output">Output</h2>
-<p>the rows are correctly sorted for the DATA object</p></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">def aroundFunc():
-    &#34;&#34;&#34;
-    Function:
-        aroundFunc
-    Description:
-        Callback function to test around function in DATA class
-    Input:
-        None
-    Output:
-        the rows are correctly sorted for the DATA object
-    &#34;&#34;&#34;
-    script_dir = os.path.dirname(__file__)
-    full_path = os.path.join(script_dir, args.file)
-    data = DATA(full_path)
-    for n, t in enumerate(data.around(data.rows[1])):
-        if n % 50 == 0:
-            print(n, round(t[1], 2), t[0].cells)</code></pre>
-</details>
-</dd>
-<dt id="src.utility.cloneFunc"><code class="name flex">
-<span>def <span class="ident">cloneFunc</span></span>(<span>)</span>
-</code></dt>
-<dd>
-<div class="desc"><h2 id="function">Function</h2>
-<p>cloneFunc</p>
-<h2 id="description">Description</h2>
-<p>Callback function to test clone function in DATA class</p>
-<h2 id="input">Input</h2>
-<p>None</p>
-<h2 id="output">Output</h2>
-<p>the cloned DATA object contains the same metadata as the original object</p></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">def cloneFunc():
-    &#34;&#34;&#34;
-    Function:
-        cloneFunc
-    Description:
-        Callback function to test clone function in DATA class
-    Input:
-        None
-    Output:
-        the cloned DATA object contains the same metadata as the original object
-    &#34;&#34;&#34;
-    script_dir = os.path.dirname(__file__)
-    full_path = os.path.join(script_dir, args.file)
-    data1 = DATA(full_path)
-    data2 = data1.clone(data1.rows)
-    return (len(data1.rows) == len(data2.rows) and
-            data1.cols.y[1].w == data2.cols.y[1].w and
-            data1.cols.x[1].at == data2.cols.x[1].at and
-            len(data1.cols.x) == len(data2.cols.x))</code></pre>
-</details>
-</dd>
-<dt id="src.utility.clusterFunc"><code class="name flex">
-<span>def <span class="ident">clusterFunc</span></span>(<span>)</span>
-</code></dt>
-<dd>
-<div class="desc"><h2 id="function">Function</h2>
-<p>clusterFunc</p>
-<h2 id="description">Description</h2>
-<p>Callback function to test cluster function in DATA class</p>
-<h2 id="input">Input</h2>
-<p>None</p>
-<h2 id="output">Output</h2>
-<p>the correct data is output from the cluster function</p></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">def clusterFunc():
-    &#34;&#34;&#34;
-    Function:
-        clusterFunc
-    Description:
-        Callback function to test cluster function in DATA class
-    Input:
-        None
-    Output:
-        the correct data is output from the cluster function
-    &#34;&#34;&#34;
-    script_dir = os.path.dirname(__file__)
-    full_path = os.path.join(script_dir, args.file)
-    data = DATA(full_path)
-    show(data.cluster(), &#34;mid&#34;, data.cols.y, 1)</code></pre>
-</details>
-</dd>
 <dt id="src.utility.copyFunc"><code class="name flex">
 <span>def <span class="ident">copyFunc</span></span>(<span>)</span>
 </code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><h2 id="function">Function</h2>
+<p>copyFunc</p>
+<h2 id="description">Description</h2>
+<p>Callback function to test deepcopy</p>
+<h2 id="input">Input</h2>
+<p>None</p>
+<h2 id="output">Output</h2>
+<p>the dictionary is successfully copied and manipulated</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def copyFunc():
+    &#34;&#34;&#34;
+    Function:
+        copyFunc
+    Description:
+        Callback function to test deepcopy
+    Input:
+        None
+    Output:
+        the dictionary is successfully copied and manipulated
+    &#34;&#34;&#34;
     t1 = {&#39;a&#39;: 1, &#39;b&#39;: {&#39;c&#39;: 2, &#39;d&#39;: [3]}}
     t2 = deepcopy(t1)
     t2[&#34;b&#34;][&#34;d&#34;][0] = 10000
@@ -833,90 +705,33 @@ y - y of line between a &amp; b</p></div>
     return not hasattr(num, &#39;some.missing.nested.field&#39;)</code></pre>
 </details>
 </dd>
-<dt id="src.utility.csvFunc"><code class="name flex">
-<span>def <span class="ident">csvFunc</span></span>(<span>)</span>
-</code></dt>
-<dd>
-<div class="desc"><h2 id="function">Function</h2>
-<p>csvFunc</p>
-<h2 id="description">Description</h2>
-<p>Callback function to test readCSV() function</p>
-<h2 id="input">Input</h2>
-<p>None</p>
-<h2 id="output">Output</h2>
-<p>there are 8 * 399 elements in the default csv file in etc/data/auto93.csv</p></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">def csvFunc():
-    &#34;&#34;&#34;
-    Function:
-        csvFunc
-    Description:
-        Callback function to test readCSV() function
-    Input:
-        None
-    Output:
-        there are 8 * 399 elements in the default csv file in etc/data/auto93.csv
-    &#34;&#34;&#34;
-    global n
-    def fun(t):
-        global n
-        n += len(t)
-    script_dir = os.path.dirname(__file__)
-    full_path = os.path.join(script_dir, args.file)
-    readCSV(full_path, fun)
-    return n == 8 * 399</code></pre>
-</details>
-</dd>
-<dt id="src.utility.dataFunc"><code class="name flex">
-<span>def <span class="ident">dataFunc</span></span>(<span>)</span>
-</code></dt>
-<dd>
-<div class="desc"><h2 id="function">Function</h2>
-<p>dataFunc</p>
-<h2 id="description">Description</h2>
-<p>Callback function to test DATA class</p>
-<h2 id="input">Input</h2>
-<p>None</p>
-<h2 id="output">Output</h2>
-<p>DATA instance is created and has correct property values when reading the default CSV file at etc/data/auto93.csv</p></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">def dataFunc():
-    &#34;&#34;&#34;
-    Function:
-        dataFunc
-    Description:
-        Callback function to test DATA class
-    Input:
-        None
-    Output:
-        DATA instance is created and has correct property values when reading the default CSV file at etc/data/auto93.csv
-    &#34;&#34;&#34;
-    script_dir = os.path.dirname(__file__)
-    full_path = os.path.join(script_dir, args.file)
-    data = DATA(full_path)
-    return (len(data.rows) == 398 and
-    data.cols.y[1].w == -1 and
-    data.cols.x[1].at == 1 and
-    len(data.cols.x) == 4
-    )</code></pre>
-</details>
-</dd>
 <dt id="src.utility.dofile"><code class="name flex">
 <span>def <span class="ident">dofile</span></span>(<span>filename)</span>
 </code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><h2 id="function">Function</h2>
+<p>dofile</p>
+<h2 id="description">Description</h2>
+<p>Opens .json file and returns data</p>
+<h2 id="input">Input</h2>
+<p>filename - path to .json file to read</p>
+<h2 id="output">Output</h2>
+<p>Data from .json file</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def dofile(filename):
+    &#34;&#34;&#34;
+    Function:
+        dofile
+    Description:
+        Opens .json file and returns data
+    Input:
+        filename - path to .json file to read
+    Output:
+        Data from .json file
+    &#34;&#34;&#34;
     with open(filename) as f:
         return json.load(f)</code></pre>
 </details>
@@ -962,12 +777,29 @@ fun - callback function to use for test case</p>
 <span>def <span class="ident">everyFunc</span></span>(<span>)</span>
 </code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><h2 id="function">Function</h2>
+<p>everyFunc</p>
+<h2 id="description">Description</h2>
+<p>Callback function to test repgrid</p>
+<h2 id="input">Input</h2>
+<p>None</p>
+<h2 id="output">Output</h2>
+<p>the rows and cols are clustered and displayed, along with the 2d grid</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def everyFunc():
+    &#34;&#34;&#34;
+    Function:
+        everyFunc
+    Description:
+        Callback function to test repgrid
+    Input:
+        None
+    Output:
+        the rows and cols are clustered and displayed, along with the 2d grid
+    &#34;&#34;&#34;
     script_dir = os.path.dirname(__file__)
     full_path = os.path.join(script_dir, args.file)
     repgrid(full_path)</code></pre>
@@ -1014,43 +846,6 @@ fun - callback function to use for test case</p>
     Seed = args.seed</code></pre>
 </details>
 </dd>
-<dt id="src.utility.halfFunc"><code class="name flex">
-<span>def <span class="ident">halfFunc</span></span>(<span>)</span>
-</code></dt>
-<dd>
-<div class="desc"><h2 id="function">Function</h2>
-<p>halfFunc</p>
-<h2 id="description">Description</h2>
-<p>Callback function to test half function in DATA class</p>
-<h2 id="input">Input</h2>
-<p>None</p>
-<h2 id="output">Output</h2>
-<p>the DATA object is correctly split in half</p></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">def halfFunc():
-    &#34;&#34;&#34;
-    Function:
-        halfFunc
-    Description:
-        Callback function to test half function in DATA class
-    Input:
-        None
-    Output:
-        the DATA object is correctly split in half
-    &#34;&#34;&#34;
-    script_dir = os.path.dirname(__file__)
-    full_path = os.path.join(script_dir, args.file)
-    data = DATA(full_path)
-    left, right, A, B, mid, c = data.half()
-    print(len(left), len(right), len(data.rows))
-    print(A.cells, c)
-    print(mid.cells)
-    print(B.cells)</code></pre>
-</details>
-</dd>
 <dt id="src.utility.kap"><code class="name flex">
 <span>def <span class="ident">kap</span></span>(<span>listOfCols, fun)</span>
 </code></dt>
@@ -1091,48 +886,30 @@ fun - anonymous function to be used as value in map</p>
 <span>def <span class="ident">last</span></span>(<span>t)</span>
 </code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><h2 id="function">Function</h2>
+<p>last</p>
+<h2 id="description">Description</h2>
+<p>Returns last element in a list</p>
+<h2 id="input">Input</h2>
+<p>t - List to return last element from</p>
+<h2 id="output">Output</h2>
+<p>Last element in t</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def last(t):
-    return t[-1]</code></pre>
-</details>
-</dd>
-<dt id="src.utility.many"><code class="name flex">
-<span>def <span class="ident">many</span></span>(<span>t, n)</span>
-</code></dt>
-<dd>
-<div class="desc"><h2 id="function">Function</h2>
-<p>many</p>
-<h2 id="description">Description</h2>
-<p>Creates a list of random rows</p>
-<h2 id="input">Input</h2>
-<p>t - DATA object
-n - Number of row samples</p>
-<h2 id="output">Output</h2>
-<p>u - list of random n rows from t</p></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">def many(t, n):
     &#34;&#34;&#34;
     Function:
-        many
+        last
     Description:
-        Creates a list of random rows
+        Returns last element in a list
     Input:
-        t - DATA object
-        n - Number of row samples
+        t - List to return last element from
     Output:
-        u - list of random n rows from t
+        Last element in t
     &#34;&#34;&#34;
-    u = []
-    for i in range(1, n + 1):
-        u.append(any(t))
-    return u</code></pre>
+    return t[-1]</code></pre>
 </details>
 </dd>
 <dt id="src.utility.numFunc"><code class="name flex">
@@ -1185,12 +962,29 @@ n - Number of row samples</p>
 <span>def <span class="ident">positionFunc</span></span>(<span>)</span>
 </code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><h2 id="function">Function</h2>
+<p>positionFunc</p>
+<h2 id="description">Description</h2>
+<p>Callback function to test repPlace</p>
+<h2 id="input">Input</h2>
+<p>None</p>
+<h2 id="output">Output</h2>
+<p>the grid after clustering rows is displayed</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def positionFunc():
+    &#34;&#34;&#34;
+    Function:
+        positionFunc
+    Description:
+        Callback function to test repPlace
+    Input:
+        None
+    Output:
+        the grid after clustering rows is displayed
+    &#34;&#34;&#34;
     script_dir = os.path.dirname(__file__)
     full_path = os.path.join(script_dir, args.file)
     t = dofile(full_path)
@@ -1239,12 +1033,29 @@ n - Number of row samples</p>
 <span>def <span class="ident">print_all_attributes</span></span>(<span>obj)</span>
 </code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><h2 id="function">Function</h2>
+<p>print_all_attributes</p>
+<h2 id="description">Description</h2>
+<p>Prints all attributes of an object</p>
+<h2 id="input">Input</h2>
+<p>obj - Object whose class attributes will be printed</p>
+<h2 id="output">Output</h2>
+<p>Formatted string of all class instance attributes and their values</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def print_all_attributes(obj):
+    &#34;&#34;&#34;
+    Function:
+        print_all_attributes
+    Description:
+        Prints all attributes of an object
+    Input:
+        obj - Object whose class attributes will be printed
+    Output:
+        Formatted string of all class instance attributes and their values
+    &#34;&#34;&#34;
     stringToPrint = &#34;{ &#34;
     for attr, value in vars(obj).items():
         stringToPrint += str(attr) + &#34;: &#34; + str(value) + &#34; &#34;
@@ -1255,12 +1066,29 @@ n - Number of row samples</p>
 <span>def <span class="ident">prototypesFunc</span></span>(<span>)</span>
 </code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><h2 id="function">Function</h2>
+<p>prototypesFunc</p>
+<h2 id="description">Description</h2>
+<p>Callback function to test clustering of rows data</p>
+<h2 id="input">Input</h2>
+<p>None</p>
+<h2 id="output">Output</h2>
+<p>the synonyms of rows found through clustering</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def prototypesFunc():
+    &#34;&#34;&#34;
+    Function:
+        prototypesFunc
+    Description:
+        Callback function to test clustering of rows data
+    Input:
+        None
+    Output:
+        the synonyms of rows found through clustering
+    &#34;&#34;&#34;
     script_dir = os.path.dirname(__file__)
     full_path = os.path.join(script_dir, args.file)
     t = dofile(full_path)
@@ -1303,46 +1131,6 @@ high - high value</p>
     return low + (high - low) * Seed / 2147483647</code></pre>
 </details>
 </dd>
-<dt id="src.utility.randFunc"><code class="name flex">
-<span>def <span class="ident">randFunc</span></span>(<span>)</span>
-</code></dt>
-<dd>
-<div class="desc"><h2 id="function">Function</h2>
-<p>randFunc</p>
-<h2 id="description">Description</h2>
-<p>Callback function to test the rand function</p>
-<h2 id="input">Input</h2>
-<p>None</p>
-<h2 id="output">Output</h2>
-<p>checks if m1 equals m2 and that they round to 0.5 as a boolean</p></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">def randFunc():
-    &#34;&#34;&#34;
-    Function:
-        randFunc
-    Description:
-        Callback function to test the rand function
-    Input:
-        None
-    Output:
-        checks if m1 equals m2 and that they round to 0.5 as a boolean
-    &#34;&#34;&#34;
-    global args
-    global Seed
-    num1, num2 = NUM(), NUM()
-    Seed = args.seed
-    for i in range(10**3):
-        num1.add(rand(0, 1))
-    Seed = args.seed
-    for i in range(10**3):
-        num2.add(rand(0, 1))
-    m1, m2 = round(num1.mid(), 10), round(num2.mid(), 10)
-    return m1 == m2 and 0.5 == round(m1, 1)</code></pre>
-</details>
-</dd>
 <dt id="src.utility.readCSV"><code class="name flex">
 <span>def <span class="ident">readCSV</span></span>(<span>sFilename, fun)</span>
 </code></dt>
@@ -1382,33 +1170,67 @@ fun - callback function to be called for each line in the CSV</p>
 <span>def <span class="ident">repCols</span></span>(<span>cols)</span>
 </code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><h2 id="function">Function</h2>
+<p>repCols</p>
+<h2 id="description">Description</h2>
+<p>Turns repgrid cols into DATA object</p>
+<h2 id="input">Input</h2>
+<p>cols - Cols to be manipulated for DATA object conversion</p>
+<h2 id="output">Output</h2>
+<p>DATA object of cols</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def repCols(cols):
+    &#34;&#34;&#34;
+    Function:
+        repCols
+    Description:
+        Turns repgrid cols into DATA object
+    Input:
+        cols - Cols to be manipulated for DATA object conversion
+    Output:
+        DATA object of cols
+    &#34;&#34;&#34;
     copyCols = deepcopy(cols)
-    for col in cols:
+    for col in copyCols:
         col[-1] = str(col[0]) + &#34;:&#34; + str(col[-1])
         for j in range(1, len(col)):
             col[j - 1] = col[j]
         col.pop()
-    cols.insert(0, [&#39;Num&#39; + str(k) for k in range(len(cols[0]))])
-    cols[0][-1] = &#34;thingX&#34;
-    return DATA(cols)</code></pre>
+    copyCols.insert(0, [&#39;Num&#39; + str(k) for k in range(len(copyCols[0]))])
+    copyCols[0][-1] = &#34;thingX&#34;
+    return DATA(copyCols)</code></pre>
 </details>
 </dd>
 <dt id="src.utility.repColsFunc"><code class="name flex">
 <span>def <span class="ident">repColsFunc</span></span>(<span>)</span>
 </code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><h2 id="function">Function</h2>
+<p>repColsFunc</p>
+<h2 id="description">Description</h2>
+<p>Callback function to test repCols function</p>
+<h2 id="input">Input</h2>
+<p>None</p>
+<h2 id="output">Output</h2>
+<p>the DATA object is created using .json repgrid cols data</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def repColsFunc():
+    &#34;&#34;&#34;
+    Function:
+        repColsFunc
+    Description:
+        Callback function to test repCols function
+    Input:
+        None
+    Output:
+        the DATA object is created using .json repgrid cols data
+    &#34;&#34;&#34;
     script_dir = os.path.dirname(__file__)
     full_path = os.path.join(script_dir, args.file)
     rawData = dofile(full_path)
@@ -1423,12 +1245,29 @@ fun - callback function to be called for each line in the CSV</p>
 <span>def <span class="ident">repPlace</span></span>(<span>data)</span>
 </code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><h2 id="function">Function</h2>
+<p>repPlace</p>
+<h2 id="description">Description</h2>
+<p>Turns a clustered repgrid object and turns it into a 2d grid</p>
+<h2 id="input">Input</h2>
+<p>data - repgrid data</p>
+<h2 id="output">Output</h2>
+<p>None</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def repPlace(data):
+    &#34;&#34;&#34;
+    Function:
+        repPlace
+    Description:
+        Turns a clustered repgrid object and turns it into a 2d grid
+    Input:
+        data - repgrid data
+    Output:
+        None
+    &#34;&#34;&#34;
     n,g = 20,[]
     for i in range(n+1):
         g.append([])
@@ -1451,12 +1290,31 @@ fun - callback function to be called for each line in the CSV</p>
 <span>def <span class="ident">repRows</span></span>(<span>t, rows, u=None)</span>
 </code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><h2 id="function">Function</h2>
+<p>repRows</p>
+<h2 id="description">Description</h2>
+<p>Turns repgrid rows into DATA object</p>
+<h2 id="input">Input</h2>
+<p>t - Dictionary of repgrid data
+rows - Rows to be manipulated for DATA object conversion</p>
+<h2 id="output">Output</h2>
+<p>DATA object of rows</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def repRows(t, rows, u=None):
+    &#34;&#34;&#34;
+    Function:
+        repRows
+    Description:
+        Turns repgrid rows into DATA object
+    Input:
+        t - Dictionary of repgrid data
+        rows - Rows to be manipulated for DATA object conversion
+    Output:
+        DATA object of rows
+    &#34;&#34;&#34;
     rows = deepcopy(rows)
     for j, s in enumerate(rows[-1]):
         rows[0][j] = str(rows[0][j]) + &#34;:&#34; + str(s)
@@ -1474,12 +1332,29 @@ fun - callback function to be called for each line in the CSV</p>
 <span>def <span class="ident">repgrid</span></span>(<span>sFile)</span>
 </code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><h2 id="function">Function</h2>
+<p>repgrid</p>
+<h2 id="description">Description</h2>
+<p>Clusters rows and cols and outputs a 2d grid representation of this clustering</p>
+<h2 id="input">Input</h2>
+<p>sFile - .json file to be used as data</p>
+<h2 id="output">Output</h2>
+<p>None</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def repgrid(sFile):
+    &#34;&#34;&#34;
+    Function:
+        repgrid
+    Description:
+        Clusters rows and cols and outputs a 2d grid representation of this clustering
+    Input:
+        sFile - .json file to be used as data
+    Output:
+        None
+    &#34;&#34;&#34;
     t = dofile(sFile)
     rows = repRows(t, transpose(t[&#34;cols&#34;]))
     cols = repCols(t[&#34;cols&#34;])
@@ -1492,12 +1367,29 @@ fun - callback function to be called for each line in the CSV</p>
 <span>def <span class="ident">reprowsFunc</span></span>(<span>)</span>
 </code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><h2 id="function">Function</h2>
+<p>reprowsFunc</p>
+<h2 id="description">Description</h2>
+<p>Callback function to test repRows function</p>
+<h2 id="input">Input</h2>
+<p>None</p>
+<h2 id="output">Output</h2>
+<p>the DATA object is created using .json repgrid rows data</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def reprowsFunc():
+    &#34;&#34;&#34;
+    Function:
+        reprowsFunc
+    Description:
+        Callback function to test repRows function
+    Input:
+        None
+    Output:
+        the DATA object is created using .json repgrid rows data
+    &#34;&#34;&#34;
     script_dir = os.path.dirname(__file__)
     full_path = os.path.join(script_dir, args.file)
     t = dofile(full_path)
@@ -1586,74 +1478,6 @@ lvl - how deep the tree is</p>
         show(node.get(&#34;right&#34;, None), what,cols,nPlaces, lvl+1)</code></pre>
 </details>
 </dd>
-<dt id="src.utility.statsFunc"><code class="name flex">
-<span>def <span class="ident">statsFunc</span></span>(<span>)</span>
-</code></dt>
-<dd>
-<div class="desc"><h2 id="function">Function</h2>
-<p>statsFunc</p>
-<h2 id="description">Description</h2>
-<p>Callback function to test stats function in DATA class</p>
-<h2 id="input">Input</h2>
-<p>None</p>
-<h2 id="output">Output</h2>
-<p>the statistics for the DATA instance using the default file at etc/data/auto93.csv are printed to the console</p></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">def statsFunc():
-    &#34;&#34;&#34;
-    Function:
-        statsFunc
-    Description:
-        Callback function to test stats function in DATA class
-    Input:
-        None
-    Output:
-        the statistics for the DATA instance using the default file at etc/data/auto93.csv are printed to the console
-    &#34;&#34;&#34;
-    script_dir = os.path.dirname(__file__)
-    full_path = os.path.join(script_dir, args.file)
-    data = DATA(full_path)
-    for k, cols in {&#39;y&#39;: data.cols.y, &#39;x&#39;: data.cols.x}.items():
-        print(k, &#34;\tmid&#34;, (data.stats(&#34;mid&#34;, cols, 2)))
-        print(&#34;&#34;, &#34;\tdiv&#34;, (data.stats(&#34;div&#34;, cols, 2)))</code></pre>
-</details>
-</dd>
-<dt id="src.utility.swayFunc"><code class="name flex">
-<span>def <span class="ident">swayFunc</span></span>(<span>)</span>
-</code></dt>
-<dd>
-<div class="desc"><h2 id="function">Function</h2>
-<p>swayFunc</p>
-<h2 id="description">Description</h2>
-<p>Callback function to test sway function in DATA class</p>
-<h2 id="input">Input</h2>
-<p>None</p>
-<h2 id="output">Output</h2>
-<p>the correct data is output from the sway function</p></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">def swayFunc():
-    &#34;&#34;&#34;
-    Function:
-        swayFunc
-    Description:
-        Callback function to test sway function in DATA class
-    Input:
-        None
-    Output:
-        the correct data is output from the sway function
-    &#34;&#34;&#34;
-    script_dir = os.path.dirname(__file__)
-    full_path = os.path.join(script_dir, args.file)
-    data = DATA(full_path)
-    show(data.sway(), &#34;mid&#34;, data.cols.y, 1)</code></pre>
-</details>
-</dd>
 <dt id="src.utility.symFunc"><code class="name flex">
 <span>def <span class="ident">symFunc</span></span>(<span>)</span>
 </code></dt>
@@ -1691,12 +1515,29 @@ lvl - how deep the tree is</p>
 <span>def <span class="ident">synonymsFunc</span></span>(<span>)</span>
 </code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><h2 id="function">Function</h2>
+<p>synonymsFunc</p>
+<h2 id="description">Description</h2>
+<p>Callback function to test clustering of repCols data</p>
+<h2 id="input">Input</h2>
+<p>None</p>
+<h2 id="output">Output</h2>
+<p>the synonyms of cols found through clustering</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def synonymsFunc():
+    &#34;&#34;&#34;
+    Function:
+        synonymsFunc
+    Description:
+        Callback function to test clustering of repCols data
+    Input:
+        None
+    Output:
+        the synonyms of cols found through clustering
+    &#34;&#34;&#34;
     script_dir = os.path.dirname(__file__)
     full_path = os.path.join(script_dir, args.file)
     show(repCols(dofile(full_path)[&#34;cols&#34;]).cluster())</code></pre>
@@ -1706,12 +1547,29 @@ lvl - how deep the tree is</p>
 <span>def <span class="ident">transpose</span></span>(<span>t)</span>
 </code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><h2 id="function">Function</h2>
+<p>transpose</p>
+<h2 id="description">Description</h2>
+<p>Transposes matrix</p>
+<h2 id="input">Input</h2>
+<p>t - Matrix to be transposed</p>
+<h2 id="output">Output</h2>
+<p>u - Transposed matrix</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def transpose(t):
+    &#34;&#34;&#34;
+    Function:
+        transpose
+    Description:
+        Transposes matrix
+    Input:
+        t - Matrix to be transposed
+    Output:
+        u - Transposed matrix
+    &#34;&#34;&#34;
     u = []
     for i in range(len(t[0])):
         u.append([t[j][i] for j in range(len(t))])
@@ -1737,22 +1595,15 @@ lvl - how deep the tree is</p>
 <li><h3><a href="#header-functions">Functions</a></h3>
 <ul class="">
 <li><code><a title="src.utility.any" href="#src.utility.any">any</a></code></li>
-<li><code><a title="src.utility.aroundFunc" href="#src.utility.aroundFunc">aroundFunc</a></code></li>
-<li><code><a title="src.utility.cloneFunc" href="#src.utility.cloneFunc">cloneFunc</a></code></li>
-<li><code><a title="src.utility.clusterFunc" href="#src.utility.clusterFunc">clusterFunc</a></code></li>
 <li><code><a title="src.utility.copyFunc" href="#src.utility.copyFunc">copyFunc</a></code></li>
 <li><code><a title="src.utility.cosine" href="#src.utility.cosine">cosine</a></code></li>
 <li><code><a title="src.utility.crashFunc" href="#src.utility.crashFunc">crashFunc</a></code></li>
-<li><code><a title="src.utility.csvFunc" href="#src.utility.csvFunc">csvFunc</a></code></li>
-<li><code><a title="src.utility.dataFunc" href="#src.utility.dataFunc">dataFunc</a></code></li>
 <li><code><a title="src.utility.dofile" href="#src.utility.dofile">dofile</a></code></li>
 <li><code><a title="src.utility.eg" href="#src.utility.eg">eg</a></code></li>
 <li><code><a title="src.utility.everyFunc" href="#src.utility.everyFunc">everyFunc</a></code></li>
 <li><code><a title="src.utility.getCliArgs" href="#src.utility.getCliArgs">getCliArgs</a></code></li>
-<li><code><a title="src.utility.halfFunc" href="#src.utility.halfFunc">halfFunc</a></code></li>
 <li><code><a title="src.utility.kap" href="#src.utility.kap">kap</a></code></li>
 <li><code><a title="src.utility.last" href="#src.utility.last">last</a></code></li>
-<li><code><a title="src.utility.many" href="#src.utility.many">many</a></code></li>
 <li><code><a title="src.utility.numFunc" href="#src.utility.numFunc">numFunc</a></code></li>
 <li><code><a title="src.utility.oo" href="#src.utility.oo">oo</a></code></li>
 <li><code><a title="src.utility.positionFunc" href="#src.utility.positionFunc">positionFunc</a></code></li>
@@ -1760,7 +1611,6 @@ lvl - how deep the tree is</p>
 <li><code><a title="src.utility.print_all_attributes" href="#src.utility.print_all_attributes">print_all_attributes</a></code></li>
 <li><code><a title="src.utility.prototypesFunc" href="#src.utility.prototypesFunc">prototypesFunc</a></code></li>
 <li><code><a title="src.utility.rand" href="#src.utility.rand">rand</a></code></li>
-<li><code><a title="src.utility.randFunc" href="#src.utility.randFunc">randFunc</a></code></li>
 <li><code><a title="src.utility.readCSV" href="#src.utility.readCSV">readCSV</a></code></li>
 <li><code><a title="src.utility.repCols" href="#src.utility.repCols">repCols</a></code></li>
 <li><code><a title="src.utility.repColsFunc" href="#src.utility.repColsFunc">repColsFunc</a></code></li>
@@ -1770,8 +1620,6 @@ lvl - how deep the tree is</p>
 <li><code><a title="src.utility.reprowsFunc" href="#src.utility.reprowsFunc">reprowsFunc</a></code></li>
 <li><code><a title="src.utility.rint" href="#src.utility.rint">rint</a></code></li>
 <li><code><a title="src.utility.show" href="#src.utility.show">show</a></code></li>
-<li><code><a title="src.utility.statsFunc" href="#src.utility.statsFunc">statsFunc</a></code></li>
-<li><code><a title="src.utility.swayFunc" href="#src.utility.swayFunc">swayFunc</a></code></li>
 <li><code><a title="src.utility.symFunc" href="#src.utility.symFunc">symFunc</a></code></li>
 <li><code><a title="src.utility.synonymsFunc" href="#src.utility.synonymsFunc">synonymsFunc</a></code></li>
 <li><code><a title="src.utility.transpose" href="#src.utility.transpose">transpose</a></code></li>

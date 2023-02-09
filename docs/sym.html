@@ -87,8 +87,21 @@ class SYM:
         for _, value in self.has.items():
             e += fun(value / self.n)
         return -e
-    
+
     def dist(self, s1, s2):
+        &#34;&#34;&#34;
+        Function:
+            dist
+        Description:
+            Determines if there is diversity around the center
+        Input:
+            self - current NUM instance
+            s1 - symbol 1
+            s2 - symbol 2
+        Output:
+            0 - there is no difference between symbols
+            1 - there is a difference between symbols or both symbols are &#39;?&#39;
+        &#34;&#34;&#34;
         return 1 if (s1 == &#34;?&#34; and s2 == &#34;?&#34;) else 0 if (s1 == s2) else 1</code></pre>
 </details>
 </section>
@@ -170,8 +183,21 @@ class SYM:
         for _, value in self.has.items():
             e += fun(value / self.n)
         return -e
-    
+
     def dist(self, s1, s2):
+        &#34;&#34;&#34;
+        Function:
+            dist
+        Description:
+            Determines if there is diversity around the center
+        Input:
+            self - current NUM instance
+            s1 - symbol 1
+            s2 - symbol 2
+        Output:
+            0 - there is no difference between symbols
+            1 - there is a difference between symbols or both symbols are &#39;?&#39;
+        &#34;&#34;&#34;
         return 1 if (s1 == &#34;?&#34; and s2 == &#34;?&#34;) else 0 if (s1 == s2) else 1</code></pre>
 </details>
 <h3>Methods</h3>
@@ -217,12 +243,35 @@ n - value to add</p>
 <span>def <span class="ident">dist</span></span>(<span>self, s1, s2)</span>
 </code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><h2 id="function">Function</h2>
+<p>dist</p>
+<h2 id="description">Description</h2>
+<p>Determines if there is diversity around the center</p>
+<h2 id="input">Input</h2>
+<p>self - current NUM instance
+s1 - symbol 1
+s2 - symbol 2</p>
+<h2 id="output">Output</h2>
+<p>0 - there is no difference between symbols
+1 - there is a difference between symbols or both symbols are '?'</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def dist(self, s1, s2):
+    &#34;&#34;&#34;
+    Function:
+        dist
+    Description:
+        Determines if there is diversity around the center
+    Input:
+        self - current NUM instance
+        s1 - symbol 1
+        s2 - symbol 2
+    Output:
+        0 - there is no difference between symbols
+        1 - there is a difference between symbols or both symbols are &#39;?&#39;
+    &#34;&#34;&#34;
     return 1 if (s1 == &#34;?&#34; and s2 == &#34;?&#34;) else 0 if (s1 == s2) else 1</code></pre>
 </details>
 </dd>
