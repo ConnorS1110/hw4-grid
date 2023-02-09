@@ -1,0 +1,20 @@
+{
+    "domain": "dissementian platforms",
+    "cols": [["RomaticFilm", 4, 5, 2, 4, 4, 4, "ActionFilm"],
+             ["KidsFilm", 3, 3, 4, 3, 3, 2, "AdultsFilm"],
+            ["ShortFilm", 5, 5, 4, 4, 4, 3, "LongFilm"],
+             ["BadFilm" , 4, 5, 4, 3, 5, 4, "GoodFilm"],
+        ["LowBudgetFilm", 5, 5, 3, 3, 4, 4, "HighBudgetFilm"],
+        ["SetInPastFilm", 5, 5, 1, 2, 5, 3, "SetInFutureFilm"],
+         ["AnimatedFilm", 1, 5, 5, 5, 5, 1, "LiveActionFilm"],
+          ["PlayfulFilm", 4, 5, 3, 5, 5, 4, "SuspensefulFilm"],
+      ["WatchItOnceFilm", 3, 2, 4, 1, 5, 5, "WatchItManyTimesFilm"],
+      ["WatchAtHomeFilm", 5, 5, 4, 3, 4, 3, "WatchInTheaterFilm"]],
+   "rows": [            [ null, null, null, null, null,  "Minions"],
+                        [ null, null, null, null,  "Inception"],
+                        [ null, null, null,  "Indiana Jones"],
+                        [ null, null,  "Titanic"],
+                        [ null,  "Avengers: Endgame"],
+                        ["Avatar"]
+            ]
+}
