@@ -57,9 +57,32 @@ class NUM:
         return (self.m2 < 0 or self.n < 2) and 0 or (self.m2 / (self.n - 1)) ** 0.5
 
     def norm(self, n):
+        """
+        Function:
+            norm
+        Description:
+            Normalizes a value
+        Input:
+            self - current NUM instance
+            n - value to normalize
+        Output:
+            Normalized value
+        """
         return n if n == "?" else (float(n) - self.lo) / (self.hi - self.lo + 1 + 10 ** (-32))
 
     def dist(self, n1, n2):
+        """
+        Function:
+            dist
+        Description:
+            Finds normalized positive difference between 2 values
+        Input:
+            self - current NUM instance
+            n1 - First value
+            n2 - Second value
+        Output:
+            Normalized + difference between n1 and n2
+        """
         if n1 == "?" and n2 == "?":
             return 1
         n1, n2 = self.norm(n1), self.norm(n2)

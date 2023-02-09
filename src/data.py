@@ -4,7 +4,6 @@ from row import ROW
 from cols import COLS
 import utility as util
 from collections.abc import Iterable
-from copy import copy
 
 class DATA:
 
@@ -95,9 +94,6 @@ class DATA:
             y = col.norm(row2.cells[col.at])
             s1 -= math.exp(col.w * (((x - y)) / len(ys)))
             s2 -= math.exp(col.w * ((y - x) / len(ys)))
-        # print("Value of s1: " + str(s1) + " Type of s1: " + str(type(s1)))
-        # print("Value of s2: " + str(s2) + " Type of s2: " + str(type(s2)))
-        # print("Value of len(ys): " + str(len(ys)) + " Type of len(ys): " + str(type(len(ys))))
         return (s1 / len(ys)) < (s2 / len(ys))
 
     def dist(self, row1, row2, cols = None):
@@ -144,8 +140,21 @@ class DATA:
         return [(row, dist) for row, dist in sorted_rows]
 
     def furthest(self, row1, rows, cols = None):
-                t = self.around(row1, rows, cols)
-                return t[-1][0]
+        """
+        Function:
+            furthest
+        Description:
+            Finds and returns the furthest away row from row1
+        Input:
+            self - current DATA instance
+            row1 - Central row to find furthest row from
+            rows - Rows to compare to distance from row1
+            cols - cols to use as the data for sorting by distance to row1
+        Output:
+            Furthest row from row1
+        """
+        t = self.around(row1, rows, cols)
+        return t[-1][0]
 
     def half(self, rows = None, cols = None, above = None):
         """
@@ -175,9 +184,7 @@ class DATA:
         def dist(row1, row2):
             return self.dist(row1, row2, cols)
         rows = rows or self.rows
-        # some = util.many(rows, util.args.Sample)
         A = above or util.any(rows)
-        # B = self.around(A, some)[int((util.args.Far * len(rows)) // 1)][0]
         B = self.furthest(A, rows)
         c = dist(A, B)
         left, right = [], []
@@ -206,7 +213,6 @@ class DATA:
             Clustered rows
         """
         rows = rows if rows else self.rows
-        # min = min if min else len(rows) ** util.args.min
         cols = cols if cols else self.cols.x
         node = {"data": self.clone(rows)}
 

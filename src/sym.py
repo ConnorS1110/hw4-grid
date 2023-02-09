@@ -59,6 +59,19 @@ class SYM:
         for _, value in self.has.items():
             e += fun(value / self.n)
         return -e
-    
+
     def dist(self, s1, s2):
+        """
+        Function:
+            dist
+        Description:
+            Determines if there is diversity around the center
+        Input:
+            self - current NUM instance
+            s1 - symbol 1
+            s2 - symbol 2
+        Output:
+            0 - there is no difference between symbols
+            1 - there is a difference between symbols or both symbols are '?'
+        """
         return 1 if (s1 == "?" and s2 == "?") else 0 if (s1 == s2) else 1
